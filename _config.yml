@@ -11,6 +11,7 @@ paginate: 6
 paginate_path: "page:num"
 
 sass:
+  style: :compressed
   sass_dir: assets/stylesheets
 
 plugins:
