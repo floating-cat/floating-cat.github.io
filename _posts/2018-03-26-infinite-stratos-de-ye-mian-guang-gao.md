@@ -15,4 +15,4 @@ published: true
 
 有时候打开 TGFC 的时候，因为网速并不是很快，只显示了 IS 的广告，正文都还没有显示，那时候我在想，就是这一瞬间啊。
 
-![Infinite Stratos advertising](/assets/images/infinite_stratos_de_ye_mian_guang_gao/advertising-charlotte-dunois-character-uncompressed.png){: width="1280" height="720"}
+![Infinite Stratos advertising](/assets/images/infinite_stratos_de_ye_mian_guang_gao/aaddzz-charlotte-dunois-character.png){: width="1280" height="720"}
