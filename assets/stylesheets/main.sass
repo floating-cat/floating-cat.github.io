@@ -16,21 +16,18 @@ h1, h2, h3, h2, h5, h6
   padding: 1.25em 1em
 
 /* header styles */
-.site-header
-  border-bottom: .063em solid $very-light-gray
-
 .site-title
   font-size: 1.5em
   line-height: 1em
+  text-decoration: underline
+  text-decoration-style: wavy
 
 .site-nav
   float: right
-  .menu-icon
-    display: none
   .page-link
     color: $dark-gray
     margin-left: 2em
-    line-height: 1.5em
+    line-height: 1.7em
 
 /* index styles */
 .posts
@@ -47,9 +44,10 @@ h1, h2, h3, h2, h5, h6
 
 /* article styles */
 .post-header
+  padding: 2em 0
+  text-align: center
   h1
     color: $pure-blue
-    margin-bottom: 0
   .meta
     color: $dark-gray
 
@@ -57,10 +55,17 @@ h1, h2, h3, h2, h5, h6
   h2, h3, h2, h5, h6
     color: $pure-blue
   p
-    text-indent: 2em
-    line-height: 1.6em
+    text-indent: 1em
+    line-height: 1.7em
     &.no-text-indent
       text-indent: 0
+  ol
+    line-height: 1.7em
+    list-style-type: hiragana
+  ul
+    line-height: 1.7em
+    list-style-type: square
+
   blockquote
     opacity: .6
     font-style: italic
@@ -92,23 +97,3 @@ h1, h2, h3, h2, h5, h6
 @media screen and (max-width: 48em)
   .wrapper
     padding: 1em 1em
-  .site-nav
-    top: 1em
-    right: 1em
-    z-index: 1
-    position: fixed
-    background-color: white
-    border: .063em solid $very-light-gray
-    .menu-icon
-      display: block
-      svg
-        float: right
-        width: 1.5em
-        height: 1.5em
-    .trigger
-      display: none
-    &:hover .trigger
-      display: block
-    .page-link
-      display: block
-      margin: 0 1em
