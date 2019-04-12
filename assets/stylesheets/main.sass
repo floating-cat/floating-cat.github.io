@@ -11,7 +11,7 @@ h1, h2, h3, h2, h5, h6
   font-weight: normal
 
 .wrapper
-  max-width: 45em
+  max-width: 42em
   margin: 0 auto
   padding: 1.25em 1em
 
@@ -64,11 +64,12 @@ h1, h2, h3, h2, h5, h6
     list-style-type: hiragana
   ul
     line-height: 1.7em
-    list-style-type: square
   blockquote
     opacity: .6
     font-style: italic
+    padding-left: .75em 
     margin-left: 0
+    margin-right: 0
     border-left: .25em solid $pure-blue
   img
     max-width: 100%
@@ -82,17 +83,21 @@ h1, h2, h3, h2, h5, h6
   figure
     margin-left: 0
     margin-right: 0
-  code
+    pre
+      // add a scrollbar
+      overflow: auto
+  p code
+    // add padding to inline code
     padding: .063em
     border: .063em solid $very-light-gray
   pre
+    white-space: pre-wrap
+    // add padding to syntax highlighting
     padding: .75em
     border: .063em solid $very-light-gray
-    white-space: pre-wrap
-    code
-      padding: 0
-      border: none
 
-@media screen and (max-width: 48em)
+@media screen and (max-width: 44em)
   .wrapper
     padding: 1em 1em
+  .post pre
+    white-space: pre
