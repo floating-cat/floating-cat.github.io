@@ -16,7 +16,7 @@ UBISOFT (JP) 在日本专门发行了[日版](http://www.ubisoft.co.jp/xblades/)
 
 所幸经过一番搜索，在 [3DM](http://bbs.3dmgame.com/thread-3034762-1-1.html) 上有人提取了 PS3 日版的语音。经过下载并解压后，可以看到里面有 sounds 和 video 这2个文件夹。我们只需要将 PC （这里及下文指代的 PC 版皆指代 Steam 版）上的这两个文件夹替换掉就行了。（为什么 PS3 版可以用于 PC 版呢？跨平台开发方便嘛，当然也有一些凑巧的成分在）
 
-```cmd
+{% highlight cmd %}
 >tree /F
 
 D:.
@@ -47,7 +47,7 @@ D:.
        14_before_final_battle.english.audio.ogg
        15_bad_ending.english.audio.ogg
        16_good_ending.english.audio.ogg
-```
+{% endhighlight %}
 
 拿 sounds 文件夹下的 english_voice_ayumi.fsb 文件来讲：**ayumi** 是女主角的名字；FSB 后缀的文件格式全称为 FMOD's sample bank format。我们可以通过 [FSB Extractor](http://aezay.dk/aezay/fsbextractor/) 这个软件来看下里面有什么。
 
@@ -67,7 +67,7 @@ D:.
 
 我们将原文件夹 sounds 下的 english_voice_ayumi.fsb 重命名为 english_voice_ayumi_original.fsb，并将替换文件下的这个文件重命名为 english_voice_ayumi_jp.fsb。再将编译后的 fsbext 可执行程序和这2个文件放置在同一个文件夹下。
 
-```bat
+{% highlight bat %}
 rem 最前面这3个英文是表示注释，我也是 Google 来的
 rem 这是 Windows 下面的批处理文件的代码
 rem md 表示新建文件夹
@@ -79,11 +79,11 @@ rem -s FILE  binary file containing the informations for rebuilding the FSB file
 rem -d DIR   output folder where extracting the files
 fsbext -v -s english_voice_ayumi_original.dat -d english_voice_ayumi_original english_voice_ayumi_original.fsb
 fsbext -v -d english_voice_ayumi_jp english_voice_ayumi_jp.fsb
-```
+{% endhighlight %}
 
 首先我们新建了2个空的文件夹，然后通过调用 `fsbext` 来提取 fsb 文件里的音频和相关的数据文件。
 
-```cmd
+{% highlight cmd %}
 >tree /F
 
 D:.
@@ -101,13 +101,13 @@ D:.
        death_01.wav
        death_02.wav
         ...
-```
+{% endhighlight %}
 
 为什么我们要新建2个文件夹呢？因为调用 `fsbext` 时，我们使用了 `-d` 参数，将 fsb 文件里的音频文件提取到该文件夹下。如果不新建文件夹，程序会报错，因为 `fsbext` 不会主动地新建文件夹。在我们提取的文件里，english_voice_ayumi_original 文件夹下的音频文件其实是没有用的，称为副产物也不为过。实际上我们需要的是原 fsb 文件重建的数据文件 （english_voice_ayumi_original.dat，来自english_voice_ayumi_original.fsb）和重建 fsb 文件所需的日语音频文件  	（english_voice_ayumi_jp 下，来自english_voice_ayumi_jp.fsb）。因为我们不需要替换文件重建的数据文件，所以在上面的批处理命令里 `fsbext -v -d english_voice_ayumi_jp english_voice_ayumi_jp.fsb` 并没有带 `-s` 参数了。如果奇怪为什么既然我们不需要原文件语音，为什么还要在 `fsbext -v -s english_voice_ayumi_original.dat -d english_voice_ayumi_original english_voice_ayumi_original.fsb` 加了 `-d` 的选项——因为如果不加的话，程序也会主动地提取音频文件，并放置在当前的目录下。所以我们通过设置 `-d`，将这些不需要的音频文件放在一个文件夹下，以免污染我们当前的目录。
 
 下面我们可以将 english_voice_ayumi_jp 里的 5个 fall_to_death 中的任意4个删除 （你喜欢哪个语音就留哪个:)），只留下其中一个，并将其重命名为原文件里的 fall_to_death.wav。现在来使用原文件的数据文件 english_voice_ayumi_original.dat 和修改过的 english_voice_ayumi_jp 下的音频文件来重建我们需要的可以使用的日语语音的 fsb 文件吧。
 
-```bat
+{% highlight bat %}
 rem -r       rebuild the original file, in short when you use -s:
 rem          if you do NOT use -r will be created the binary file with the info
 rem          if you use -r will be read the binary file (-s) and will be created a
@@ -115,7 +115,7 @@ rem          new FSB file (so it becomes the output and not the input)
 rem          Example:   fsbext -s files.dat    input.fsb
 rem                     fsbext -s files.dat -r output.fsb
 fsbext -s english_voice_ayumi_original.dat -d english_voice_ayumi_jp -r english_voice_ayumi.fsb
-```
+{% endhighlight %}
 
 写了那么多字，有点累了……但是实际上我们离成功还有一步之遥。如果你用 FMOD Event Player （这个软件包含在 [FMOD Ex Designer](http://www.fmod.org/download/) 里） 来播放该文件时 （需要将原文件夹 sounds 下的 english_voice_ayumi.fev 和重建后的 english_voice_ayumi.fsb 放置在同一个文件夹下才行，类似于 CUE 与 FLAC 的关系），你就会发现其中的语音变成了噪音 （类似于收音机的那种电波哦~~）。
 
@@ -123,7 +123,7 @@ fsbext -s english_voice_ayumi_original.dat -d english_voice_ayumi_jp -r english_
 
 解铃还须系铃人嘛，我们来看下 fsbext 的源代码文件 [`fsb.h`](https://github.com/gdawg/fsbext/blob/master/src/fsb.h) 吧。搜索一下 channels 就可以找到以下代码了。
 
-```c
+{% highlight c %}
 typedef struct {
     char        name[32];
 
@@ -139,7 +139,7 @@ typedef struct {
     uint32t    loopend;
    
 } FSOUNDFSBSAMPLEHEADER1;
-```
+{% endhighlight %}
 
 当然搜索到的结果里还有一些类似的数据结构包含有 `numchannels` 这个字段。但是没关系，我们可以看到 `numchannels` 这个字段是 `uint16t`，也就是说这是个 16 bits 的 `unsigned int`。也就是说对于 fsb 文件里的音频，单声道是用 01 来表示，而双声道是 02。
 

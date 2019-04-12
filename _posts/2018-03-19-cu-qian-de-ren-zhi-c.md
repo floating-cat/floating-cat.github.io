@@ -22,23 +22,23 @@ published: true
 
 ### printf
 
-```c
+{% highlight c %}
 int printf (const char * format, ... );
 
 int a = 7;
 printf("%d", a);
-```
+{% endhighlight %}
 
 这是一段非常简单的 `printf` 的代码。`printf` 是一个接受可变参数的函数。实际上 `printf` 就是一个解释器，第一个参数是一个格式化字符串，之后的可变参数是提供给这个解释器额外的参数。在调用 `printf` 的时候，参数按值传递，`format` 之后的可变参数还需要进行 *默认参数提升* （规格规定）。在上面的这个例子里，当解释器解析到 `%d` 时，它明白你传给他的第二个实参实际上是一个有符号的整数，所以以有符号的整数形式对从该实参开始的地址对应的二进制序列进行解码/表示。当我们把当前例子里的 `%d` 改成其他格式化说明符的时候，解释器会用不同的解码/表现方式来呈现 `a` ，当然实际上这时候这就是一个 undefined behavior（规格规定）。
 
 ### Union（联合体）
-```c
+{% highlight c %}
 union U {
     short s;
     int i;
     double d;
 };
-```
+{% endhighlight %}
 
 这是一段非常简单的 C 语言联合体的声明。引用 [cppreference](http://en.cppreference.com/w/c/language/union) 里一段精简了的对联合体的解释：
 
@@ -50,7 +50,7 @@ union U {
 
 在 《The C Programming Language》的第 8.7 节实现一个非系统提供的 `malloc`，为了使该 `malloc` 返回的储存空间对齐，也使用了联合体（因为这个例子比较复杂，该文就不详细介绍了，感兴趣的读者可以查阅原书）：
 
-```c
+{% highlight c %}
 typedef long Align;
 
 union header {
@@ -62,7 +62,7 @@ union header {
 } ;
 
 typedef union header Header;
-```
+{% endhighlight %}
 
 ### void *
 C 语言的抽象并不多，但是这并不影响我们用 C 来进行 *generic programming*。
