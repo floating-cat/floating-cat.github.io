@@ -61,6 +61,7 @@ cavorite_interface=tun0
 
 start() {
   sudo tunsafe start -d /etc/tunsafe/tunsafe.conf
+  # 本文后续篇幅我们讲解的路由和 DNS 的配置的命令都会放到这段注释之后
 }
 
 stop() {
@@ -81,7 +82,7 @@ esac
 {% endhighlight %}
 </figure>
 
-因为本文并不会讲解 TunSafe 配置文件的配置，所以这部分的内容请查阅 WireGuard 和 TunSafe 的文档说明吧。我们可以结合自己的 TunsSafe 配置文件（片段里的配置文件命名成了 `tunsafe.conf`）来使用这几段内容。下面是一段用在 Fedora （当然对很多其他的 Linux 发行版本也适用）上对上述的这三个文件的拷贝、设置权限的命令。
+因为本文并不会讲解 TunSafe 配置文件的配置，所以这部分的内容请查阅 WireGuard 和 TunSafe 的文档说明吧。我们可以结合自己的 TunsSafe 配置文件（片段里的配置文件命名成了 `tunsafe.conf`）来使用这几段内容。下面是一段用在 Fedora （当然对很多其他的 Linux 发行版本也适用）上对上述的这三个文件的拷贝、设置权限和运行/停止 TunSafe 的相关命令。
 
 {% highlight shell %}
 sudo mkdir /etc/tunsafe/
@@ -92,9 +93,15 @@ sudo chmod a+x /etc/tunsafe/
 sudo chmod a+r -R /etc/tunsafe/tunsafe.conf
 sudo chmod a+r /usr/local/bin/tunsafe.start-stop
 sudo chmod a+r /etc/systemd/system/tunsafe.service
-{% endhighlight %}
 
-如果一切顺利的话，我们现在就可以通过 `sudo systemctl enable --now tunsafe` 来设置开机启动 TunSafe 并马上运行 TunSafe 了。
+# 运行 TunSafe
+sudo systemctl start tunsafe
+# 停止运行 TunSafe
+sudo systemctl stop tunsafe
+# 设置开机启动 TunSafe 并马上运行 TunSafe
+sudo systemctl enable --now tunsafe
+
+{% endhighlight %}
 
 在进行路由的配置之前，让我们先来考虑一个问题。我们是应该让这些 凯铂莱 进行全局逃亡，让部分应用/网络请求通过路由配置，直连网络。还是应该让这些部分的应用/网络请求使用这些 凯铂莱，而其他的默认直连。当然这两方面都有合理的应用场景，而本文只会着重地解释后一种（前一种可以从本文的后一种相关的配置中复用绝大部分的配置）。当然无论哪种方案，有选择性地让部分的网络请求通过 凯铂莱 进行访问，都可以减少这方面网络请求的特征、提高部分网络请求的速度（因为我们没必要总是绕一层进行网络请求）。这篇文章之所以说明后者的配置，是因为在作者虚构的场景里，前者需要配置的黑名单远多余后者的白名单数目。很多时候、比如说在 Fedora 依赖/JetBrains IDE 版本更新的时候，默认就直连网络，就可以获得到极佳的速度了。在前一种方案里，就要为每一个这种情况的应用设置黑名单了。
 
@@ -225,7 +232,22 @@ sudo chmod a+xr /usr/local/bin/t
 + Exec=t /bin/bash /usr/bin/spotify %U
 {% endhighlight %}
 
-在运行 shell 的时候，我们可以通过 `t bash` 进入到白名单模式（就那么土的命名下吧）。这时候只要不通过 sudo 来运行命令，我们所要运行的其他的命令都会运行在白名单下了:
+这里还要说明一个特例，当重复打开 Chrome 的时候，新运行的 Chrome 仍是最初打开的 Chrome 所使用的用户和 group。因为后打开的 Chrome 其实还是在使用最初打开的 Chrome 的实例[17]。当遇到这样的问题的时候，我们可以在运行 Chrome 时指定使用另外的用户的数据的文件夹来告知 Chrome 我们要使用一个新的 Chrome 实例：
+
+{% highlight shell %}
+# 使用 --user-data-dir 来指定另外的用户的数据的文件夹
+# 来启动一个新的 Chrome 实例
+google-chrome --user-data-dir=/home/our_user_name/.config/google-chrome-new-instance-dir
+# https://superuser.com/a/457045
+# 使用一个临时的文件夹来存放临时的用户数据也可以
+google-chrome --user-data-dir=$(mktemp -d)
+# 白名单启动一个新的 Chrome 实例
+t google-chrome --user-data-dir=$(mktemp -d)
+{% endhighlight %}
+
+通过这种方式，我们可以在白名单的情况下使用 Chrome，并结合上面这个的技巧，在新的 Chrome 实例里直连网络。当前 Chrome 是否在白名单内的状态也会保留到该 Chrome 实例里创建的网页的桌面快捷方式（Menu Bar - More tools - Create shortcut…）中。
+
+在运行 shell 的时候，我们可以通过 `t bash` 进入到白名单模式（就那么土地命名下吧）。这时候只要不通过 sudo 来运行命令，我们所要运行的其他的命令都会运行在白名单下了:
 
 {% highlight shell %}
 t bash
@@ -243,7 +265,7 @@ wget https://example.com/
 3. 不使用 凯铂莱 来处理 DNS 解析请求的时候，我们所获取到的域名 IP 并不是我们所使用的 凯铂莱 最适宜用于连接的请求的 IP。
 
 我们很难判断在解析什么域名的时候使用 凯铂莱 的隧道通信来解析 DNS，还是通过直连 DNS 服务商来解析 DNS。
-1. dnsmasq-china-list[17] 是一个很好的项目来让我们来解决这个问题。这个项目提供了大量的可以直接走国内 DNS 解析服务商的白名单的域名。但是因为 dnsmasq 本身并没有对这种大量的 server 记录进行优化，所以对这些白名单记录进行查询的时候比较费性能。我们可以使用第三方的 dnsmasq fork 版本来解决这个问题或者不去介意这点的性能损失[18]。
+1. dnsmasq-china-list[18] 是一个很好的项目来让我们来解决这个问题。这个项目提供了大量的可以直接走国内 DNS 解析服务商的白名单的域名。但是因为 dnsmasq 本身并没有对这种大量的 server 记录进行优化，所以对这些白名单记录进行查询的时候比较费性能。我们可以使用第三方的 dnsmasq fork 版本来解决这个问题或者不去介意这点的性能损失[19]。
 2. 舍弃考虑 DNS 解析的速度。所有使用 凯铂莱 的网络请求的 DNS 解析请求，我们都使用直连的 DNS over TLS/HTTPS 或者走 凯铂莱 来解析。当我们使用直连的 DNS over TLS/HTTPS 的时候，会出现上面提到的第三点所说的域名访问速度不是最佳的问题。并且一些 ISP 提供商也会对这些 DNS over TLS/HTTPS 服务的连接造成阻碍。当我们走 凯铂莱 来解析 DNS 的时候，我们很可能将部分的国内网站的域名解析成国外的 IP，然后通过 凯铂莱 进行本来可以通过直连网络访问的网络请求。
 
 我们的 DNS 策略也比较简单。让所有目的地端口是 53 （DNS 解析使用 53 端口）并且 group 是 cavorite 的网络请求走 凯铂莱 过：
@@ -368,5 +390,6 @@ esac
 [14]: https://github.com/lihaoyi/Ammonite "Scala 脚本工具"
 [15]: https://firewalld.org/ "Fedora 的防火墙软件"
 [16]: https://serverfault.com/a/797289
-[17]: https://github.com/felixonmars/dnsmasq-china-list
-[18]: https://github.com/felixonmars/dnsmasq-china-list/issues/227
+[17]: https://bugs.chromium.org/p/chromium/issues/detail?id=27344
+[18]: https://github.com/felixonmars/dnsmasq-china-list
+[19]: https://github.com/felixonmars/dnsmasq-china-list/issues/227
