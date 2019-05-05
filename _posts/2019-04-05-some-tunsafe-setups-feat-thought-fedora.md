@@ -300,14 +300,6 @@ sudo ip route add $cavorite_dns dev $cavorite_interface
 {% highlight bash %}
 #!/bin/bash
 
-# 下面是一些有用的变量，虽然在当前的脚本里我们用不到
-# https://unix.stackexchange.com/a/307790
-default_interface=$(/sbin/ip route | awk '/default/ { print $5 }')
-# https://stackoverflow.com/a/1226395
-default_gateway=$(/sbin/ip route | awk '/default/ { print $3 }')
-# https://stackoverflow.com/a/25851186
-ip=$(hostname -I | cut -d' ' -f1)
-
 cavorite_interface=tun0
 cavorite_gid=yyyy
 cavorite_mss=$((1420-20-20))
