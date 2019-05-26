@@ -61,12 +61,6 @@ h1, h2, h3, h2, h5, h6
     text-indent: 1em
     &.no-text-indent
       text-indent: 0
-  .vertical
-    writing-mode: vertical-rl
-    -webkit-writing-mode: vertical-rl
-    -ms-writing-mode: vertical-rl
-    margin: 0 auto
-    height: 17em
   ol
     list-style-type: hiragana
   blockquote
@@ -83,6 +77,12 @@ h1, h2, h3, h2, h5, h6
     margin: 0 auto
     &.not-center
       display: inline
+  .vertical
+    writing-mode: vertical-rl
+    -webkit-writing-mode: vertical-rl
+    -ms-writing-mode: vertical-rl
+    margin: 0 auto 2em auto
+    height: 14em
 
 .post
   figure
@@ -106,3 +106,5 @@ h1, h2, h3, h2, h5, h6
     padding: 1em 1em
   .post pre
     white-space: pre
+  .post-content .vertical
+    height: 17em
