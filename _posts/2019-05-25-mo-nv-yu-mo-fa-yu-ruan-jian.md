@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "魔女和魔法和软件"
+title: "魔女与魔法与软件"
 date: '2019-05-25 22:08:00 +0800'
 categories:
   - Weather
