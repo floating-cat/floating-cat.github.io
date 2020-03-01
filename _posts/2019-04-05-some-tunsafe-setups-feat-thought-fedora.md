@@ -7,7 +7,7 @@ categories:
 published: true
 ---
 
-> 19世纪末，阿尔比昂王国控制一种名为“凯铂莱”的物质而成为世界强国。但因为贫富悬殊问题，导致基层市民爆发革命，爆发后不久，首都伦敦被巨大的墙壁断开以致东西分隔。
+> 19世纪末，阿尔比昂王国控制一种名为"凯铂莱"的物质而成为世界强国。但因为贫富悬殊问题，导致基层市民爆发革命，爆发后不久，首都伦敦被巨大的墙壁断开以致东西分隔。
 
 我们走在路上，经过鲜花四溢的花园，然后我们回到了这一篇 blog 中。
 
@@ -367,6 +367,8 @@ esac
 </figure>
 
 注：另外我们还可以在凯铂莱的服务器端可以使用 Google 的 TCP BBR 拥塞控制算法，该算法对于 over TCP 的凯铂莱有不错的提速效果。详细的配置可以参考该教程[20]。
+
+续篇： [Rethink: Some TunSafe Setups]({% post_url 2020-03-01-rethink-some-tunsafe-setups %})。
 
 [1]: https://en.wikipedia.org/wiki/Security_through_obscurity
 [2]: https://www.wireguard.com/
