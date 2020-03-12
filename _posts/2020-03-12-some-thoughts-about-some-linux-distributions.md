@@ -66,7 +66,7 @@ published: true
 ### 优点
 1. 安装和配置系统真的很优雅和美。可以很方便地在配置文件里写明要在 /etc 下创建的文件、编写自定义的 systemd service。可以把 Emacs 相关的依赖也写在配置里，然后通过 Nix 统一管理安装。甚至可以把默认 Emacs 软件包里自带的 emacs.desktop 去掉（因为很多人都会用 Emacs daemon，而自带的 *emacs.desktop* 并不会以 daemon mode 的方式启动 Emacs）。
 
-### 缺点：
+### 缺点
 1. 很多软件包比起 Fedora、Arch 来说要旧好些，并且软件包 bug 也多好些。
 2. 因为 Nix 的包管理的机理，每次更新都要更新很多软件包（包含依赖这些软件包的其他软件包）。
 3. 就算是有 Home Manager 这样的工具，还是无法很好地管理用户层的很多软件的配置。
