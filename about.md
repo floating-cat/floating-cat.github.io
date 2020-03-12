@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post_content_only
 title: About
 permalink: /about/
 ---
