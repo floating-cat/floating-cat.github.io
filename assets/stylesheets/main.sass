@@ -1,6 +1,3 @@
-body
-  font-family: $my-font-family
-
 a
   color: $pure-blue
   text-decoration: none
@@ -11,14 +8,13 @@ h1, h2, h3, h2, h5, h6
   font-weight: normal
 
 .wrapper
-  max-width: 42em
+  max-width: 44em
   margin: 0 auto
-  padding: 1.25em 1em
+  padding: 1.5em 1em 1em 1em
 
 /* header styles */
 .site-title
   font-size: 1.5em
-  line-height: 1em
   text-decoration: underline
   text-decoration-style: wavy
 
@@ -26,7 +22,7 @@ h1, h2, h3, h2, h5, h6
   float: right
   .page-link
     color: $dark-gray
-    margin-left: 2em
+    margin-left: 1em
     line-height: 1.7em
 
 /* index styles */
@@ -47,11 +43,13 @@ h1, h2, h3, h2, h5, h6
   padding: 2em 0
   text-align: center
   h1
+    font-size: 2em
     color: $pure-blue
   .meta
     color: $dark-gray
 
 .post-content
+  color: $dark
   font-size: 1.1em
   h2, h3, h2, h5, h6
     color: $pure-blue
@@ -102,9 +100,7 @@ h1, h2, h3, h2, h5, h6
     padding: .75em
     border: .063em solid $very-light-gray
 
-@media screen and (max-width: 44em)
-  .wrapper
-    padding: 1em 1em
+@media screen and (max-width: 46em)
   .post pre
     white-space: pre
   .post-content .vertical
