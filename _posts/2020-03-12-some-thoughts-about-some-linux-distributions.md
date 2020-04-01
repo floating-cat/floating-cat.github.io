@@ -13,7 +13,7 @@ published: true
 
 1. 用户目录下的文件乱七八糟。不过遵循 XDG 标准的软件越来越多了。
 2. 我不是很喜欢 Linux 的文件系统层次结构标准。虽然我大体上明白什么文件会放在哪里，但是这些对我来说总是有些模糊。如果有一个更容易让一般人明白的现代的文件系统结构我觉得会更好。
-3. 所有用文件系统层次结构标准的 Linux 应该像 Clear Linux OS 那样，/etc 只放用户手动覆盖的配置。
+3. 所有用文件系统层次结构标准的 Linux 应该像 Clear Linux OS 那样，*/etc* 只放用户手动覆盖的配置。
 
 关于美学上，我更是希望：
 
@@ -64,7 +64,7 @@ published: true
 看上去很美好，但是我觉得因为生态的问题，所以不是非常很好用。
 
 ### 优点
-1. 安装和配置系统真的很优雅和美。可以很方便地在配置文件里写明要在 /etc 下创建的文件、编写自定义的 systemd service。可以把 Emacs 相关的依赖也写在配置里，然后通过 Nix 统一管理安装。甚至可以把默认 Emacs 软件包里自带的 emacs.desktop 去掉（因为很多人都会用 Emacs daemon，而自带的 *emacs.desktop* 并不会以 daemon mode 的方式启动 Emacs）。
+1. 安装和配置系统真的很优雅和美。可以很方便地在配置文件里写明要在 */etc* 下创建的文件、编写自定义的 systemd service。可以把 Emacs 相关的依赖也写在配置里，然后通过 Nix 统一管理安装。甚至可以把默认 Emacs 软件包里自带的 *emacs.desktop* 去掉（因为很多人都会用 Emacs daemon，而自带的 *emacs.desktop* 并不会以 daemon mode 的方式启动 Emacs）。
 
 ### 缺点
 1. 很多软件包比起 Fedora、Arch 来说要旧好些，并且软件包 bug 也多好些。
