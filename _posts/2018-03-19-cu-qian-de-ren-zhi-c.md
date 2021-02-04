@@ -40,7 +40,7 @@ union U {
 };
 {% endhighlight %}
 
-这是一段非常简单的 C 语言联合体的声明。引用 [cppreference](http://en.cppreference.com/w/c/language/union) 里一段精简了的对联合体的解释：
+这是一段非常简单的 C 语言联合体的声明。引用 [cppreference](https://en.cppreference.com/w/c/language/union) 里一段精简了的对联合体的解释：
 
 > The union is only as big as necessary to hold its largest member (additional unnamed trailing padding may also be added). The other members are allocated in the same bytes as part of that largest member. A pointer to a union can be cast to a pointer to each of its members (if a union has bit field members, the pointer to a union can be cast to the pointer to the bit field's underlying type). If the member used to access the contents of a union is not the same as the member last used to store a value, the object representation of the value that was stored is reinterpreted as an object representation of the new type (this is known as type punning).
 
@@ -68,7 +68,7 @@ typedef union header Header;
 C 语言的抽象并不多，但是这并不影响我们用 C 来进行 *generic programming*。
 
 被废弃的后文：
-与这份[讲义](http://cs.boisestate.edu/~amit/teaching/253/handouts/07-c-generic-coding-handout.pdf)的内容类似（如果能发邮件征得引用大部分内容的话就更好了），讲述一下如何用 `void *` 来写*polymorphic function*  和 *generic data structures*（该讲义举的 `min` 函数和 `List` 例子都非常的好）。然后再引申出用 `void *` 来表示/表现这些抽象的过程中，其他类型的指针（包括指针函数）被转换，成为具体实现的演绎。
+与这份[讲义](https://cs.boisestate.edu/~amit/teaching/253/handouts/07-c-generic-coding-handout.pdf)的内容类似（如果能发邮件征得引用大部分内容的话就更好了），讲述一下如何用 `void *` 来写*polymorphic function*  和 *generic data structures*（该讲义举的 `min` 函数和 `List` 例子都非常的好）。然后再引申出用 `void *` 来表示/表现这些抽象的过程中，其他类型的指针（包括指针函数）被转换，成为具体实现的演绎。
 
 第二大节标题为内存布局，主要讲在一般的操作系统架构下一个 C 程序大致的布局。简要地描述一下 `text`、`data`、`stack` 和 `heap` 这些数据段，并引入 `call stack`（包含调用函数的时候入参、返回地址和本地变量的情况）。在这大节下的几个小结，讨论一下 C 语言在该内存布局下的一些抽象泄露的例子。第一小节，会重新回到原来前文提到的 `printf` 的例子，讲述当 `printf` 的可变参数和格式化字符串对应的参数个数不一样的情况（另外也可以提及 *format string vulnerability*）；第二小节，会讲述变长参数的实现的原理；第三小节，会讲述 `setjmp` 和 `longjmp`；第四小节，会讲述 *buffer overflow*。最后一小节，讲述一下[内存管理](https://en.wikipedia.org/wiki/C_(programming_language)#Memory_management)。
 

@@ -12,9 +12,9 @@ published: true
 
 前段时间，在 Steam 上买了 X-Blades，为了使用日语语音而鼓捣了好久——虽然玩后觉得这游戏是有点烂。
 
-UBISOFT (JP) 在日本专门发行了[日版](http://www.ubisoft.co.jp/xblades/)，而 Steam 版是由 TopWare Interactive 发行，包含了多国的语言 （不含日语）。虽然这游戏是跨平台游戏，但是相对于日版来说，PC 版比 PS3/Xbox 360 更难下载到，尤其是让我用 Share 、Perfect Dark 之类的软件完整地下完这游戏，应该很难吧 。
+UBISOFT (JP) 在日本专门发行了[日版](https://www.ubisoft.co.jp/xblades/)，而 Steam 版是由 TopWare Interactive 发行，包含了多国的语言 （不含日语）。虽然这游戏是跨平台游戏，但是相对于日版来说，PC 版比 PS3/Xbox 360 更难下载到，尤其是让我用 Share 、Perfect Dark 之类的软件完整地下完这游戏，应该很难吧 。
 
-所幸经过一番搜索，在 [3DM](http://bbs.3dmgame.com/thread-3034762-1-1.html) 上有人提取了 PS3 日版的语音。经过下载并解压后，可以看到里面有 sounds 和 video 这2个文件夹。我们只需要将 PC （这里及下文指代的 PC 版皆指代 Steam 版）上的这两个文件夹替换掉就行了。（为什么 PS3 版可以用于 PC 版呢？跨平台开发方便嘛，当然也有一些凑巧的成分在）
+所幸经过一番搜索，在 [3DM](https://bbs.3dmgame.com/thread-3034762-1-1.html) 上有人提取了 PS3 日版的语音。经过下载并解压后，可以看到里面有 sounds 和 video 这2个文件夹。我们只需要将 PC （这里及下文指代的 PC 版皆指代 Steam 版）上的这两个文件夹替换掉就行了。（为什么 PS3 版可以用于 PC 版呢？跨平台开发方便嘛，当然也有一些凑巧的成分在）
 
 {% highlight cmd %}
 >tree /F
@@ -117,7 +117,7 @@ rem                     fsbext -s files.dat -r output.fsb
 fsbext -s english_voice_ayumi_original.dat -d english_voice_ayumi_jp -r english_voice_ayumi.fsb
 {% endhighlight %}
 
-写了那么多字，有点累了……但是实际上我们离成功还有一步之遥。如果你用 FMOD Event Player （这个软件包含在 [FMOD Ex Designer](http://www.fmod.org/download/) 里） 来播放该文件时 （需要将原文件夹 sounds 下的 english_voice_ayumi.fev 和重建后的 english_voice_ayumi.fsb 放置在同一个文件夹下才行，类似于 CUE 与 FLAC 的关系），你就会发现其中的语音变成了噪音 （类似于收音机的那种电波哦~~）。
+写了那么多字，有点累了……但是实际上我们离成功还有一步之遥。如果你用 FMOD Event Player （这个软件包含在 [FMOD Ex Designer](https://www.fmod.org/download/) 里） 来播放该文件时 （需要将原文件夹 sounds 下的 english_voice_ayumi.fev 和重建后的 english_voice_ayumi.fsb 放置在同一个文件夹下才行，类似于 CUE 与 FLAC 的关系），你就会发现其中的语音变成了噪音 （类似于收音机的那种电波哦~~）。
 
 现在再来看下 [图2](#pic-english-voice-ayumi-fsb-ps3-vs-pc) （看截图的 Channels 这个字段） 吧，因为 PS3 的 fsb 文件里的音频文件是双音轨 （只有个别几个是单音轨），而 PC Steam 版里的音频文件是单音轨……是不是有点无语了！
 
