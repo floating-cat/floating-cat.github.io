@@ -2,7 +2,7 @@ title: &title "monsoon"
 name: *title
 author: "Lejia Chen"
 description: "Welcome to my blog"
-url: "http://monsoon.cl"
+url: "https://monsoon.cl"
 baseurl: ""
 
 permalink: pretty
