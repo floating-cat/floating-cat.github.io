@@ -20,7 +20,7 @@ layout: default
   {% if paginator.previous_page %}
   <a href="{{ paginator.previous_page_path }}">&laquo; Prev</a>
   {% else %}
-  <span>&laquo; Prev</span>
+  &laquo; Prev
   {% endif %}
 
   {% for i in (1..paginator.total_pages) %}
@@ -38,7 +38,7 @@ layout: default
   {% elsif paginator.next_page %}
   <a href="{{ paginator.next_page_path }}">Next &raquo;</a>
   {% else %}
-  <span>Next &raquo;</span>
+  Next &raquo;
   {% endif %}
 </div>
 {% endif %}
