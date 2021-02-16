@@ -17,28 +17,30 @@ layout: default
 
 {% if paginator.total_pages > 1 %}
 <div class="pagination">
-  {% if paginator.previous_page %}
-  <a href="{{ paginator.previous_page_path }}">&laquo; Prev</a>
-  {% else %}
+  {% assign current_page = paginator.page %}
+
+  {% if current_page == 1 %}
   &laquo; Prev
+  {% elsif current_page == 2 %}
+  <a href="{{ site.baseurl }}/category/{{ page.title | slugify }}/">&laquo; Prev</a>
+  {% else %}
+  <a href="{{ site.baseurl }}/category/{{ page.title | slugify }}/page{{ current_page | minus:1 }}/">&laquo; Prev</a>
   {% endif %}
 
   {% for i in (1..paginator.total_pages) %}
-  {% if i == paginator.page %}
+  {% if i == current_page %}
   {{ i }}
   {% elsif i == 1 %}
-  <a href="{{ site.baseurl }}/category/{{ page.title | slugify }}/index.html">{{ i }}</a>
+  <a href="{{ site.baseurl }}/category/{{ page.title | slugify }}/">{{ i }}</a>
   {% else %}
-  <a href="{{ site.baseurl }}/category/{{ page.title | slugify }}/page{{ i }}.html">{{ i }}</a>
+  <a href="{{ site.baseurl }}/category/{{ page.title | slugify }}/page{{ i }}/">{{ i }}</a>
   {% endif %}
   {% endfor %}
 
-  {% if paginator.page == 1 %}
-  <a href="{{ site.baseurl }}/category/{{ page.title | slugify }}/page2.html">Next &raquo;</a>
-  {% elsif paginator.next_page %}
-  <a href="{{ paginator.next_page_path }}">Next &raquo;</a>
-  {% else %}
+  {% if current_page == paginator.total_pages %}
   Next &raquo;
+  {% else %}
+  <a href="{{ site.baseurl }}/category/{{ page.title | slugify }}/page{{ current_page | plus:1 }}/">Next &raquo;</a>
   {% endif %}
 </div>
 {% endif %}
