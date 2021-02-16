@@ -2,8 +2,7 @@
 layout: post
 title: 从传输媒体来看耳机线材
 date: '2018-04-16 20:41:00 +0800'
-categories:
-  - hifi
+categories: [post, hifi]
 published: false
 ---
 

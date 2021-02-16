@@ -2,8 +2,7 @@
 layout: post
 title: Infinite Stratos 的页面广告
 date: '2018-03-25 16:37:00 +0800'
-categories: 
-  - ACG
+categories: [post, acg]
 published: true
 ---
 

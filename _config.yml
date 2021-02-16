@@ -1,14 +1,10 @@
-title: &title "monsoon"
-name: *title
+title: "monsoon"
 author: "Lejia Chen"
 description: "Welcome to my blog"
 url: "https://monsoon.cl"
-baseurl: ""
-
-permalink: pretty
 
 paginate: 6
-paginate_path: "/page:num/"
+permalink: /:year/:month/:day/:title:output_ext
 
 sass:
   style: :compressed
@@ -18,3 +14,5 @@ plugins:
   - jekyll-paginate
   - jekyll-feed
   - jekyll-sitemap
+  - jekyll-category-pages
+  - jekyll-redirect-from
