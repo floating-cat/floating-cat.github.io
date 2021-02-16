@@ -2,8 +2,7 @@
 layout: post
 title: 还是应该多写写文章
 date: '2018-03-21 22:13:00 +0800'
-categories: 
-  - weather
+categories: [post, weather]
 published: false
 ---
 

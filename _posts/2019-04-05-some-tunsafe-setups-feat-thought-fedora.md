@@ -2,8 +2,7 @@
 layout: post
 title: "Some TunSafe Setups (feat. Thought, Fedora)"
 date: '2019-04-05 17:48:00 +0800'
-categories:
-  - Linux
+categories: [post, linux]
 published: true
 ---
 

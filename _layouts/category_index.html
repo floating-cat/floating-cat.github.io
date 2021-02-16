@@ -1,0 +1,52 @@
+---
+layout: default
+---
+{% assign paginator = page.paginator %}
+
+<div class="posts">
+  <ul>
+    {% for post in paginator.posts %}
+    <li>
+      <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <span class="post-date"><time
+          datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time></span>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% if paginator.total_pages > 1 %}
+<div class="pagination">
+  {% if paginator.previous_page %}
+  <a href="{{ paginator.previous_page_path }}">&laquo; Prev</a>
+  {% else %}
+  <span>&laquo; Prev</span>
+  {% endif %}
+
+  {% for i in (1..paginator.total_pages) %}
+  {% if i == paginator.page %}
+  {{ i }}
+  {% elsif i == 1 %}
+  <a href="{{ site.baseurl }}/category/{{ page.title | slugify }}/index.html">{{ i }}</a>
+  {% else %}
+  <a href="{{ site.baseurl }}/category/{{ page.title | slugify }}/page{{ i }}.html">{{ i }}</a>
+  {% endif %}
+  {% endfor %}
+
+  {% if paginator.page == 1 %}
+  <a href="{{ site.baseurl }}/category/{{ page.title | slugify }}/page2.html">Next &raquo;</a>
+  {% elsif paginator.next_page %}
+  <a href="{{ paginator.next_page_path }}">Next &raquo;</a>
+  {% else %}
+  <span>Next &raquo;</span>
+  {% endif %}
+</div>
+{% endif %}
+
+<script>
+    (function () {
+        if (window.location.href.endsWith("/category/post/index.html")) {
+            history.replaceState({}, null, "{{ site.baseurl }}/");
+        }
+    })();
+</script>

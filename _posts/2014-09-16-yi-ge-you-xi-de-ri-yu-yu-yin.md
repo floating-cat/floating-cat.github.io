@@ -2,8 +2,7 @@
 layout: post
 title: 一个游戏的日语语音
 date: "2014-09-16 9:00:00 +0800"
-categories: 
-  - journey
+categories: [post, journey]
 published: true
 ---
 

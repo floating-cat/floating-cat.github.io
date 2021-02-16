@@ -2,8 +2,7 @@
 layout: post
 title: "对一些 Linux 发行版本的思考"
 date: '2020-03-12 16:00:00 +0800'
-categories:
-  - Linux
+categories: [post, linux]
 published: true
 ---
 
