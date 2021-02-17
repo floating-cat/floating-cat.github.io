@@ -14,7 +14,15 @@ layout: default
   </div>
 
   <div class="post-content" itemprop="articleBody">
+    {% if page.poem %}
+    <div class="poem">
+      <div class="poem-text">
+        {{ content }}
+      </div>
+    </div>
+    {% else %}
     {{ content }}
+    {% endif %}
   </div>
 
   <div class="post-comment" itemprop="comment">

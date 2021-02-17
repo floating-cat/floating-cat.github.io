@@ -6,6 +6,9 @@ url: "https://monsoon.cl"
 paginate: 6
 permalink: /:year/:month/:day/:title/
 
+kramdown:
+  hard_wrap: true
+
 sass:
   style: :compressed
   sass_dir: assets/stylesheets
