@@ -47,7 +47,7 @@ layout: default
 
 <script>
     (function () {
-        if (window.location.href.endsWith("/category/post/index.html")) {
+        if (window.location.href.endsWith("/category/post/")) {
             history.replaceState({}, null, "{{ site.baseurl }}/");
         }
     })();
