@@ -4,6 +4,7 @@ title: About & Links
 permalink: /about_and_links/
 ---
 
+{:.about-content}
 喜欢一瞬间被风般吹拂的感动。
 
 ## 友情链接
