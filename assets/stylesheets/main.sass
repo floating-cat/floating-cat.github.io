@@ -1,3 +1,8 @@
+body
+  max-width: 44em
+  margin: 0 auto
+  padding: 1em
+
 a
   color: $pure-blue
   text-decoration: none
@@ -7,26 +12,26 @@ a
 h1, h2, h3, h2, h5, h6
   font-weight: normal
 
-.wrapper
-  max-width: 44em
-  margin: 0 auto
-  padding: 1.5em 1em 1em 1em
-
 /* header styles */
+.site-header
+  display: flex
+  align-items: center
+  padding: 0.5em 0
+
 .site-title
   font-size: 1.5em
   text-decoration: underline
   text-decoration-style: wavy
 
 .site-nav
-  float: right
+  margin-left: auto
   .page-link
     color: $dark-gray
     margin-left: 1em
-    line-height: 1.7em
 
 /* index styles */
 .posts
+  margin-top: 2.5em
   ul
     padding-left: 0
     list-style-type: none
@@ -86,14 +91,14 @@ h1, h2, h3, h2, h5, h6
       display: inline
   .vertical
     writing-mode: vertical-rl
-    -webkit-writing-mode: vertical-rl
-    -ms-writing-mode: vertical-rl
     margin: 0 auto 2em auto
     height: 14em
   .links a
     color: $dark-gray
 
 .post
+  h1
+    margin-bottom: 0.5em
   figure
     margin-left: 0
     margin-right: 0
@@ -110,7 +115,15 @@ h1, h2, h3, h2, h5, h6
     padding: .75em
     border: .063em solid $very-light-gray
 
+.post-comment
+  padding-top: 0.5em
+
+.about-content
+  padding: 1em 0 0.5em 0
+
 @media screen and (max-width: 46em)
+  .post-header
+    padding: .5em 0
   .post pre
     white-space: pre
   .post-content .vertical
