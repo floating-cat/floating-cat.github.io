@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "《源君物语》心得"
-date: '2020-02-23 11:00:00 +0800'
+title: 《源君物语》心得
+date: 2020-02-23 11:00:00 +0800
 categories: [nokosu, book]
 published: true
 ---

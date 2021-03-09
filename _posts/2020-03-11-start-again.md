@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "始动"
-date: '2020-03-11 21:00:00 +0800'
+title: 始动
+date: 2020-03-11 21:00:00 +0800
 categories: [post, story]
 published: true
 ---

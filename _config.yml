@@ -1,7 +1,7 @@
-title: "monsoon"
-author: "Lejia Chen"
-description: "Welcome to my blog"
-url: "https://monsoon.cl"
+title: 'monsoon'
+author: 'Lejia Chen'
+description: 'Welcome to my blog'
+url: 'https://monsoon.cl'
 
 paginate: 6
 permalink: /:year/:month/:day/:title/

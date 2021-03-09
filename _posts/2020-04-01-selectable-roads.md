@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "无法选择的心情"
-date: '2020-04-01 21:00:00 +0800'
+title: 无法选择的心情
+date: 2020-04-01 21:00:00 +0800
 categories: [post, story]
 published: true
 ---

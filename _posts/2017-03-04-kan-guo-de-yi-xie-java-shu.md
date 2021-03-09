@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 看过的一些 Java 书
-date: "2017-03-03 17:05:00 +0800"
+date: 2017-03-03 17:05:00 +0800
 categories: [post, programming]
 published: true
 ---

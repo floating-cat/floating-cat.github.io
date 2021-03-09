@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "无法被消融的"
-date: '2021-03-07 04:00:00 +0800'
+title: 无法被消融的
+date: 2021-03-07 04:00:00 +0800
 categories: [post, story]
 published: true
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Rethink: Some TunSafe Setups"
-date: '2020-03-01 15:00:00 +0800'
+title: 'Rethink: Some TunSafe Setups'
+date: 2020-03-01 15:00:00 +0800
 categories: [post, linux]
 published: true
 ---
