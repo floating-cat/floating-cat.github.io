@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "骤停"
-date: '2020-03-11 22:00:00 +0800'
+title: 骤停
+date: 2020-03-11 22:00:00 +0800
 categories: [post, story]
 published: true
 ---

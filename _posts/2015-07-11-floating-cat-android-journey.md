@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "[废弃]浮游黑猫的 Android 之旅"
-date: '2015-07-11 19:18:00 +0800'
+title: '[废弃]浮游黑猫的 Android 之旅'
+date: 2015-07-11 19:18:00 +0800
 categories: [post, android]
 published: true
 ---

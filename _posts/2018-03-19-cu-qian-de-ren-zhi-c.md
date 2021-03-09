@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "[废弃] 粗浅地认知 C"
-date: '2018-03-19 20:32:00 +0800'
+title: '[废弃] 粗浅地认知 C'
+date: 2018-03-19 20:32:00 +0800
 categories: [post, programming]
 published: true
 ---

@@ -1,8 +1,8 @@
 ---
 layout: post
 poem: true
-title: "共鸣"
-date: '2021-02-17 20:00:00 +0800'
+title: 共鸣
+date: 2021-02-17 20:00:00 +0800
 categories: [nokosu, book]
 published: true
 ---

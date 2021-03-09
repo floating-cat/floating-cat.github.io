@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "《三体》读后感"
-date: '2021-02-27 20:00:00 +0800'
+title: 《三体》读后感
+date: 2021-02-27 20:00:00 +0800
 categories: [nokosu, book]
 published: true
 ---

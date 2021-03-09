@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 第三方评论系统编写的分析
-date: "2014-06-07 21:00:00 +0800"
+date: 2014-06-07 21:00:00 +0800
 categories: [post, programming]
 published: false
 ---
