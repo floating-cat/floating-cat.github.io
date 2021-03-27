@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 失落的技术
-date: 2021-03-09 19:00:00 +0800
+date: 2021-03-22 19:00:00 +0800
 categories: [post, programming, story]
 published: true
 ---
