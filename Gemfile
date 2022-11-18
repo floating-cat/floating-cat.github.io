@@ -4,9 +4,7 @@ gem "jekyll"
 gem "webrick"
 
 group :jekyll_plugins do
-  gem 'jekyll-paginate'
   gem 'jekyll-feed'
   gem 'jekyll-sitemap'
-  gem 'jekyll-category-pages'
-  gem 'jekyll-redirect-from'
+  gem "jekyll-paginate-v2"
 end
