@@ -98,20 +98,21 @@ h1, h2, h3, h2, h5, h6
 .post
   h1
     margin-bottom: 0.5em
+  a
+    word-break: break-all
   figure
     margin-left: 0
     margin-right: 0
-    pre
-      // add a scrollbar
-      overflow: auto
   p code
     // add padding to inline code
     padding: .063em
     border: .063em solid $very-light-gray
   pre
-    white-space: pre-wrap
     // add padding to syntax highlighting
     padding: .75em
+    // add a scrollbar
+    overflow: auto
+    white-space: pre-wrap
     border: .063em solid $very-light-gray
 
 .post-comment
