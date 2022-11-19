@@ -48,12 +48,12 @@ ExecStop=/usr/local/bin/tunsafe.start-stop stop
 
 [Install]
 WantedBy=multi-user.target
-  {% endhighlight %}
+{% endhighlight %}
 </figure>
 
 <figure>
   <figcaption>/usr/local/bin/tunsafe.start-stop 的初始版本</figcaption>
-  {% highlight bash %}
+{% highlight bash %}
 #!/bin/bash
 
 cavorite_interface=tun0
@@ -83,7 +83,7 @@ esac
 
 因为本文并不会讲解 TunSafe 配置文件的配置，所以这部分的内容请查阅 WireGuard 和 TunSafe 的文档说明吧。我们可以结合自己的 TunsSafe 配置文件（片段里的配置文件命名成了 `tunsafe.conf`）来使用这几段内容。下面是一段用在 Fedora （当然对很多其他的 Linux 发行版本也适用）上对上述的这三个文件的拷贝、设置权限和运行/停止 TunSafe 的相关命令。
 
-{% highlight shell %}
+```shell
 sudo mkdir /etc/tunsafe/
 sudo cp tunsafe.conf /etc/tunsafe/
 sudo cp tunsafe.start-stop /usr/local/bin/
@@ -99,14 +99,13 @@ sudo systemctl start tunsafe
 sudo systemctl stop tunsafe
 # 设置开机启动 TunSafe 并马上运行 TunSafe
 sudo systemctl enable --now tunsafe
-
-{% endhighlight %}
+```
 
 在进行路由的配置之前，让我们先来考虑一个问题。我们是应该让这些凯铂莱进行全局逃亡，让部分应用/网络请求通过路由配置，直连网络。还是应该让这些部分的应用/网络请求使用这些凯铂莱，而其他的默认直连。当然这两方面都有合理的应用场景，而本文只会着重地解释后一种（前一种可以从本文的后一种相关的配置中复用绝大部分的配置）。当然无论哪种方案，有选择性地让部分的网络请求通过凯铂莱进行访问，都可以减少这方面网络请求的特征、提高部分网络请求的速度（因为我们没必要总是绕一层进行网络请求）。这篇文章之所以说明后者的配置，是因为在作者虚构的场景里，前者需要配置的黑名单远多余后者的白名单数目。很多时候、比如说在 Fedora 依赖/JetBrains IDE 版本更新的时候，默认就直连网络，就可以获得到极佳的速度了。在前一种方案里，就要为每一个这种情况的应用设置黑名单了。
 
 在配置路由的时候，一份基于位置/国家的网络地址列表非常有用。比如说我们可以从 china_ip_list[12] 获得一份中国大陆地区的网络地址的列表。因为这份列表对中国大陆地区的网络地址进行了合并处理（可能也做了模糊化处理），所以这一份的列表比起其他类似的列表条目数少了很多。这样不多的数目我们可以很好地用在路由中。我们可以让所有在这个列表里的网络地址请求，都使用本地 IP 直连网络。为了达到这样的目的，首先我们需要把这个列表里的网络地址加到 ipset[13] 里。下面是一段用 Ammonite[14] 生成 firewalld[15] 所需要的 ipset 配置文件的脚本，读者可以使用自己熟悉的工具来生成同样的配置文件，并通过 firewalld-cmd 导入。
 
-{% highlight scala %}
+```scala
 // Fedora/firewalld version
 val url = "https://raw.githubusercontent.com/" +
   "17mon/china_ip_list/master/china_ip_list.txt"
@@ -118,7 +117,7 @@ ${chinaNetworks.mkString("  <entry>", "</entry>\n  <entry>", "</entry>")}
 </ipset>
 """
 write("china_networks.xml", ipsetFileContent)
-{% endhighlight %}
+```
 
 <figure>
   <figcaption>china_networks.xml</figcaption>
@@ -131,14 +130,14 @@ write("china_networks.xml", ipsetFileContent)
 {% endhighlight %}
 </figure>
 
-{% highlight shell %}
+```shell
 sudo firewall-cmd --permanent --ipset=ipset \
 --new-ipset-from-file=china_networks.xml
-{% endhighlight %}
+```
 
 不使用 firewalld 的 Linux 发行版本，可以将这个列表里的网络地址通过 ipset 命令进行添加。
 
-{% highlight scala %}
+```scala
 // ipset command version
 val url = "https://raw.githubusercontent.com/" +
   "17mon/china_ip_list/master/china_ip_list.txt"
@@ -146,17 +145,17 @@ val url = "https://raw.githubusercontent.com/" +
 %('sudo, 'ipset, 'create, 'china_networks, "hash:net")
 chinaNetworks foreach (x => %('sudo, 'ipset, 'add, 'china_networks, x))
 sudo bash -c "sudo ipset save > /etc/ipset/ipset"
-{% endhighlight %}
+```
 
 终于到了用 iptables 配置路由的时候了！我们的路由策略比较简单，就是让白名单的应用（通过应用运行时的 group id 进行白名单标识）使用凯铂莱进行逃亡——当这些应用对不在 ipset 里的网络地址和非私有地址进行请求的 时候。
 
-{% highlight shell %}
+```shell
 # 建一个 group， 所有需要使用凯铂莱进行逃亡的应用的 group 都使用这个 group
 sudo groupadd cavorite
 # 获取这个 group 的 GID（注释里 yyyy 字段），该 id 用于之后的路由配置
 getent group cavorite
 # xxx:x:yyyy:xxx
-{% endhighlight %}
+```
 
 <figure>
   <figcaption>/usr/local/bin/tunsafe.start-stop 的一部分</figcaption>
@@ -216,24 +215,24 @@ sg cavorite -c "$*"
 {% endhighlight %}
 </figure>
 
-{% highlight shell %}
+```shell
 # 将我们的用户加到 cavorite 这个 group 里
 # 这样子我们才能使用 sg 命令来使我们要运行的命令运行在该 cavorite group 下
 sudo usermod -a -G cavorite our_user_name
 sudo cp t /usr/local/bin/
 sudo chmod a+xr /usr/local/bin/t
-{% endhighlight %}
+```
 
 现在，我们可以通过这个脚本来随意地将要运行的应用加入到白名单下。比如说我们可以使用 `t wget https://example.com/` 来通过凯铂莱访问 example 这个网站；通过 GUI 或者文本编辑器来修改应用程序的 .desktop 文件，来将想要运行的桌面应用添加到白名单内:
 
-{% highlight diff %}
+```diff
 - Exec=/bin/bash /usr/bin/spotify %U
 + Exec=t /bin/bash /usr/bin/spotify %U
-{% endhighlight %}
+```
 
 这里还要说明一个特例，当重复打开 Chrome 的时候，新运行的 Chrome 仍是最初打开的 Chrome 所使用的用户和 group。因为后打开的 Chrome 其实还是在使用最初打开的 Chrome 的实例[17]。当遇到这样的问题的时候，我们可以在运行 Chrome 时指定使用另外的用户的数据的文件夹来告知 Chrome 我们要使用一个新的 Chrome 实例：
 
-{% highlight shell %}
+```shell
 # 使用 --user-data-dir 来指定另外的用户的数据的文件夹
 # 来启动一个新的 Chrome 实例
 google-chrome --user-data-dir=/home/our_user_name/.config/google-chrome-new-instance-dir
@@ -242,20 +241,20 @@ google-chrome --user-data-dir=/home/our_user_name/.config/google-chrome-new-inst
 google-chrome --user-data-dir=$(mktemp -d)
 # 白名单启动一个新的 Chrome 实例
 t google-chrome --user-data-dir=$(mktemp -d)
-{% endhighlight %}
+```
 
 通过这种方式，我们可以在白名单的情况下使用 Chrome，并结合上面这个的技巧，在新的 Chrome 实例里直连网络。当前 Chrome 是否在白名单内的状态也会保留到该 Chrome 实例里创建的网页的桌面快捷方式（Menu Bar - More tools - Create shortcut…）中。
 
 在运行 shell 的时候，我们可以通过 `t bash` 进入到白名单模式（就那么土地命名下吧）。这时候只要不通过 sudo 来运行命令，我们所要运行的其他的命令都会运行在白名单下了:
 
-{% highlight shell %}
+```shell
 t bash
 # 进入白名单模式
 # 通过凯铂莱访问 example 这个网站
 wget https://example.com/
 # 使用 CTRL+Ｄ 离开了当前的 bash
 # 离开了白名单模式
-{% endhighlight %}
+```
 
 下面我们来考虑 DNS 的问题吧：
 
