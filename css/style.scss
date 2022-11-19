@@ -5,6 +5,6 @@ $pure-blue: #0091ea;
 $dark-gray: #818181;
 $very-light-gray: #e8e8e8;
 
-@import 'normalize', 'main', 'syntax';
+@import 'normalize', 'main', 'solarized';
 
 @include solarized-light
