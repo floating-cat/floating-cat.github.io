@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: list
 title: nokosu
 pagination:
   enabled: true

@@ -1,5 +1,5 @@
 ---
-layout: post_content_only
+layout: post_without_comments
 title: About & Links
 permalink: /about_and_links/
 ---
