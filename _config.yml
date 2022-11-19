@@ -13,8 +13,9 @@ sass:
 
 plugins:
   - jekyll-feed
-  - jekyll-sitemap
   - jekyll-paginate-v2
+  - jekyll-last-modified-at
+  - jekyll-sitemap
 
 pagination:
   enabled: true
