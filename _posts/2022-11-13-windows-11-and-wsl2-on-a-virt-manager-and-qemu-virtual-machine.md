@@ -8,7 +8,7 @@ published: true
 
 I want to use the WSL2 in my Linux. Yes, it's weird but there are some use cases though I hate WSL2 and Hyper-V! The Hyper-V support in VirtualBox is not good and I failed to use the WSL2 when using VirtualBox. The VMware Fusion Player should have well support for Hyper-V (they work together with Microsoft to add this feature) but their license doesn't allow commercial use.
 
-So I tried the Virt-Manager and I like it now. It has a UI and an XML (so I am doing the declarative programming!) to configure the VM and can easily add new hardware/modules to VMs. The bad part is you need to check the documentation and related resources to configure some features that could be easier done in other VM software e.g. adding a shared folder. Like using other open-source software, I can bear with it and I can totally understand the main focus when developing these programs.
+So I tried the Virt-Manager and I like it now. It has a UI and a corresponding XML (so I am doing the declarative programming!) to configure the VM and can easily add new hardware/modules to VMs. The bad part is you need to check the documentation and related resources to configure some features that could be easier done in other VM software e.g. adding a shared folder. Like using other open-source software, I can bear with it and I can totally understand the main focus when developing these programs.
 
 This is a simple guide that mainly lists some tips I found when installing/using Windows 11 + WSL2 in Virt-Manager/QEMU.
 
