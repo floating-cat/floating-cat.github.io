@@ -6,7 +6,7 @@ categories: [post, journey]
 published: true
 ---
 
-> https://drive.google.com/file/d/0B3Ap9NYzzJSOWkxmUmQ3TjdFbE0/edit?usp=sharing
+> https://drive.google.com/file/d/0B3Ap9NYzzJSOWkxmUmQ3TjdFbE0/view?usp=sharing&resourcekey=0-UeVrjy8Tdf7o8IkhEyhPUg
 {: style="overflow-wrap: break-word"}
 
 前段时间，在 Steam 上买了 X-Blades，为了使用日语语音而鼓捣了好久——虽然玩后觉得这游戏是有点烂。
