@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://monsoon.cl/feed.xml" rel="self" type="application/atom+xml" /><link href="https://monsoon.cl/" rel="alternate" type="text/html" /><updated>2024-02-16T06:40:35+00:00</updated><id>https://monsoon.cl/feed.xml</id><title type="html">monsoon</title><subtitle>Welcome to my blog</subtitle><entry><title type="html">探索在 Linux 上更好地运行微信的方式</title><link href="https://monsoon.cl/2024/02/13/explore-a-better-way-to-run-WeChat-on-Linux/" rel="alternate" type="text/html" title="探索在 Linux 上更好地运行微信的方式" /><published>2024-02-13T05:00:00+00:00</published><updated>2024-02-15T07:42:23+00:00</updated><id>https://monsoon.cl/2024/02/13/explore-a-better-way-to-run-WeChat-on-Linux</id><content type="html" xml:base="https://monsoon.cl/2024/02/13/explore-a-better-way-to-run-WeChat-on-Linux/"><![CDATA[<p>有时候我需要在 Linux 上使用微信，这不是为什么要在 Linux 上用微信或者为什么要用微信的问题，而是能不能和使用效率的问题。有时候在手机或者虚拟机上使用微信需要很大的 Context Change，所以我还是希望能找到一个更好的方式。</p>
+
+<p>以下是我的基本需求：</p>
+
+<ul>
+  <li>微信聊天功能基本上是能正常用的，可以查看最近的微信聊天记录。</li>
+  <li>尽量不要把微信相关的程序和配置文件和 Linux 上的系统和用户文件混在一起。最起码有一些沙箱机制可以确保微信程序本身无法读取到 Linux 上比如说 home 的文件路径。</li>
+  <li>启动和使用微信会比较方便。</li>
+</ul>
+
+<p>在我尝试了以下的一些方案后，这是我的心得感受：</p>
+
+<h3 id="在虚拟机里使用微信">在虚拟机里使用微信</h3>
+
+<p>之前我是使用 QEMU/KVM 运行 Windows，然后偶尔在里面使用微信的。每次使用微信需要启动虚拟机有些麻烦，并且 QEMU 本身不支持像是其他虚拟机支持的 Unity/Seamless 模式，所以切到虚拟机使用微信是很繁琐的。另外开启虚拟机使用微信所需要占用系统的 overhead 有点高。</p>
+
+<p>也许使用 <a href="https://github.com/winapps-org/winapps">winapps</a> 会是一个更好的方案吧。有时候我也需要使用一些另外的 Windows 应用，所以这会是一个通用解决需要使用 Windows 应用的好方法吧。或者还是使用类似<a href="https://github.com/ne0YT/Linux-Subsystem-for-Windows_Seamless_windows_apps_on_Linux">这样的项目</a>直接使用 VirtualBox 来启动微信也是一个好主意。另外 VirtualBox 最近也支持 KVM 了。</p>
+
+<h3 id="uos-微信版本">UOS 微信版本</h3>
+
+<p>在 UOS 版本没出前，我用过微信的网页版本，有些比如说无法 @ 别人、引用聊天内容和在重新打开网页版后，历史记录会丢失这类的小问题。看上去 UOS 版本已经修复了一些相关的问题。但是使用 UOS 可能会有风险导致微信账号被封，所以我没有尝试这个版本。在其他的 Linux 上无法放心地使用官方的 Linux 版本让人无语。微信官方应该使用其他的方式来解决有人使用这个版本来实现 bot 而不是限制其他正常的 Linux 用户使用这个版本。</p>
+
+<h3 id="在-linux-下使用-wine-版本的微信">在 Linux 下使用 Wine 版本的微信</h3>
+
+<p>我发现 <a href="https://aur.archlinux.org/packages/com.qq.weixin.spark">com.qq.weixin.spark</a> 是 Arch Linux 下当前最好的使用 Wine 来运行微信的包。我的顾虑是我相信这个包的打包者，但是我不太确定包里的 deb 会做一些什么不安全的事情——虽然我也相信这个包应该是安全的。但是 Wine 本身不是一个沙箱机制，运行在它里面的微信也可以做一些不安全的事情。另外在我的 Arch Linux 上，安装一个这样的包和其他值得信任的软件包混在一起，不会是一个好主意。</p>
+
+<h4 id="放在-distrobox-里运行">放在 distrobox 里运行</h4>
+
+<p>我尝试在 <a href="https://github.com/89luca89/distrobox">distrobox</a> 下运行这些 Wine 版本的微信，但是我发现使用微信时候，微信本身会莫名其妙地闪退。不知道是不是 distrobox 或者容器限制了一些什么资源或者关闭了什么特性，导致了这个闪退问题。不使用 distrobox 来运行同样的 Wine 版本的微信，我没有遇到闪退的问题。看网上有人说在使用 Docker 时需要传 <code class="language-plaintext highlighter-rouge">--ipc=host</code> 参数来避免微信闪退，但是 distrobox 已经传了这个参数。在我实际的测试中，我发现现在的 Wine 版本的微信就算运行在 Docker 下，不使用这个参数也不会闪退。本来我是想通过 distrobox 指定另外的 home 路径配合 <a href="https://github.com/igo95862/bubblejail">bubblejail</a> 沙箱运行微信，看来这个思路行不通并且把事情弄复杂了。</p>
+
+<h4 id="放在-bottles-里运行">放在 Bottles 里运行</h4>
+
+<p><a href="https://github.com/bottlesdevs/Bottles">Bottles</a> 可以沙箱化地运行 Wine，这可以实现我的隔离运行微信的需求。但是在实际使用中，我遇到了一些 Wine 运行微信的 bug：</p>
+
+<ul>
+  <li>当我使用 Wine 并配置中文语言时，我无法在微信里使用输入法。当我使用默认的英文语言时，输入法正常了，但是中文会显示为 ▯，除非我在这个 Wine 的环境下加入微软雅黑的字体文件。</li>
+  <li>聊天输入框无法看到光标，导致修改输入的内容变得非常困难。</li>
+  <li>输入框背景是全白的，而不是正常的灰色。</li>
+</ul>
+
+<h4 id="使用盒装微信运行">使用盒装微信运行</h4>
+
+<p><a href="https://github.com/huan/docker-wechat">盒装微信</a>是一个使用 Docker 运行 Wine 版本微信的方案。我可以在 distrobox 里成功运行 docker 使用这个版本的微信（虽然嵌套使用容器不会是一个好主意）。不过这个项目的一些地方我不太喜欢（还是非常感谢作者提供了一个这样的项目来解决了许多 Linux 用户使用微信的问题）：</p>
+
+<ul>
+  <li>使用的 Wine 版本有点旧。</li>
+  <li>运行这个 Docker 镜像需要使用的一些参数如 <code class="language-plaintext highlighter-rouge">--privileged</code>。</li>
+  <li>使用 PulseAudio。</li>
+  <li>程序经常会弹出错误提示的窗口。</li>
+</ul>
+
+<h3 id="最后">最后</h3>
+
+<p>也许因为非我所创综合症或者个人的一些吹毛求疵，我自己花了一些时间编写了一个运行在 Docker 里的 Wine 版本的微信：<a href="https://github.com/floating-cat/wechat-in-docker">wechat-in-docker</a> 。</p>
+
+<p>这个版本的微信基于 <a href="https://aur.archlinux.org/packages/com.qq.weixin.spark">com.qq.weixin.spark</a> 包构建，使用了<a href="https://zhuanlan.zhihu.com/p/106926984">这里的思路</a>来修复了切换到其他程序时，微信阴影窗口残留的问题。另外这个镜像使用了 PipeWire，所以在只使用 PulseAudio 的 Linux 环境上会没有声音（不过这是一个特性而不是一个 bug 哦）。</p>
+
+<p>另外我还给我的这个微信加了一个有点可爱的应用图标！</p>]]></content><author><name></name></author><category term="post" /><category term="linux" /><summary type="html"><![CDATA[有时候我需要在 Linux 上使用微信，这不是为什么要在 Linux 上用微信或者为什么要用微信的问题，而是能不能和使用效率的问题。有时候在手机或者虚拟机上使用微信需要很大的 Context Change，所以我还是希望能找到一个更好的方式。]]></summary></entry><entry><title type="html">Making an L2TP/IPsec VPN work in my Linux</title><link href="https://monsoon.cl/2022/11/13/making-an-l2tp-and-ipsec-vpn-work-in-my-linux/" rel="alternate" type="text/html" title="Making an L2TP/IPsec VPN work in my Linux" /><published>2022-11-13T08:00:00+00:00</published><updated>2022-11-13T09:56:28+00:00</updated><id>https://monsoon.cl/2022/11/13/making-an-l2tp-and-ipsec-vpn-work-in-my-linux</id><content type="html" xml:base="https://monsoon.cl/2022/11/13/making-an-l2tp-and-ipsec-vpn-work-in-my-linux/"><![CDATA[<p>I need to use a VPN to access some resources and I hope this VPN is using a VPN protocol like WireGuard but sadly this is an L2TP/IPsec VPN.</p>
+
+<p>This VPN can be easily configured in Windows/macOS and mobile OSes but there is no guide on how to use it in Linux from VPN providers.</p>
+
+<p>After some struggle, I finally make it works in my Arch Linux and I hope my effort can shed some light on other experiencing the same situation.</p>
+
+<p>Firstly I checked the ArchWiki <a href="https://wiki.archlinux.org/title/Openswan_L2TP/IPsec_VPN_client_setup">here</a> to use the “networkmanager-l2tp” and “strongswan” packages and NetworkManager GUI to set up the VPN, but it failed to connect to the server.</p>
+
+<p>Using <code class="language-plaintext highlighter-rouge">journalctl -u NetworkManager.service</code> in a Terminal showed a message “no acceptable traffic selectors found” and the solution <a href="https://github.com/nm-l2tp/NetworkManager-l2tp/wiki/Known-Issues#strongswan-no-acceptable-traffic-selectors-found">here</a> fixed this issue.</p>
+
+<p>The VPN still failed to connect to the server and now the logs showed “no socket implementation registered, sending failed”. I searched for this message online but couldn’t find any solution or know the possible root cause.</p>
+
+<p>So I tried a lot of random things (like disabling my firewall temporarily and enabling some L2TP/IPsec options) but none of them worked.</p>
+
+<p>Luckily I checked the NetworkManager-l2tp’s <a href="https://github.com/nm-l2tp/NetworkManager-l2tp/wiki/Known-Issues#ipsec-ikev1-algorithms">Known Issues</a> and I thought my VPN might use some legacy ciphers which are disabled in the strongSwan by default now. Because they use the  L2TP/IPsec, you can’t expect them to use more secure protocols.</p>
+
+<blockquote>
+  <p>NetworkManager-l2tp versions 1.2.6 to 1.2.14 use the Libreswan or strongSwan default set of allowed algorithms for phase 1 (Main Mode) and phase 2 (Quick Mode) proposal negotiations. This means VPN servers that are using only legacy ciphers that strongSwan or Libreswan now consider broken will result in a failed connection, unless user specified algorithms to supplement or override the default set of algorithms are used for phase 1 and 2 in the IPsec config dialog box.</p>
+</blockquote>
+
+<p>Then I used the <a href="https://aur.archlinux.org/packages/ike-scan">ike-scan</a> and guide <a href="https://github.com/nm-l2tp/NetworkManager-l2tp/wiki/Known-Issues#querying-vpn-server-for-its-ikev1-algorithm-proposals">here</a> to find out my VPN’s needed “Phase1 Algorithms” and “Phase2 Algorithms” (<code class="language-plaintext highlighter-rouge">aes256-sha1,aes128-sha1,3des-sha1</code>, which are what Windows 10 and iOS use).</p>
+
+<p>The VPN could connect to the server after it, but I couldn’t use it to access any websites (<code class="language-plaintext highlighter-rouge">wget www.example.com</code>) or ping any IPs (<code class="language-plaintext highlighter-rouge">ping 8.8.8.8</code>) successfully. When it failed to connect these, the VPN would be disconnected automatically.</p>
+
+<p>Tried to use some different MTUs but this was not the cause. Then I suspected there might be some route problems. Maybe I need to add some routes manually or need to enable something like <code class="language-plaintext highlighter-rouge">net.ipv4.ip_forward</code> to use it?</p>
+
+<p>After some trying, I noticed there is <a href="https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/issues/946#note_1406609">a bug</a> in NetworkManager or packages packaged in Arch Linux.</p>
+
+<p>Finally, using a command like <code class="language-plaintext highlighter-rouge">sudo ip a del 172.16.100.10 peer 63.2.5.44 dev ppp0</code> mentioned in this bug’s comment fixed my issues and now I can use this L2TP/IPsec VPN in my Linux!</p>]]></content><author><name></name></author><category term="post" /><category term="linux" /><summary type="html"><![CDATA[I need to use a VPN to access some resources and I hope this VPN is using a VPN protocol like WireGuard but sadly this is an L2TP/IPsec VPN.]]></summary></entry><entry><title type="html">Windows 11+WSL2 on a Virt-Manager/QEMU Virtual Machine</title><link href="https://monsoon.cl/2022/11/13/windows-11-and-wsl2-on-a-virt-manager-and-qemu-virtual-machine/" rel="alternate" type="text/html" title="Windows 11+WSL2 on a Virt-Manager/QEMU Virtual Machine" /><published>2022-11-13T05:00:00+00:00</published><updated>2022-12-04T11:02:25+00:00</updated><id>https://monsoon.cl/2022/11/13/windows-11-and-wsl2-on-a-virt-manager-and-qemu-virtual-machine</id><content type="html" xml:base="https://monsoon.cl/2022/11/13/windows-11-and-wsl2-on-a-virt-manager-and-qemu-virtual-machine/"><![CDATA[<p>I want to use the WSL2 in my Linux. Yes, it’s weird but there are some use cases though I hate WSL2 and Hyper-V! The Hyper-V support in VirtualBox is not good and I failed to use the WSL2 when using VirtualBox. The VMware Fusion Player should have well support for Hyper-V (they work together with Microsoft to add this feature) but their license doesn’t allow commercial use.</p>
+
+<p>So I tried the Virt-Manager and I like it now. It has a UI and a corresponding XML (so I am doing the declarative programming!) to configure the VM and can easily add new hardware/modules to VMs. The bad part is you need to check the documentation and related resources to configure some features that could be easier done in other VM software e.g. adding a shared folder. Like using other open-source software, I can bear with it and I can totally understand the main focus when developing these programs.</p>
+
+<p>This is a simple guide that mainly lists some tips I found when installing/using Windows 11 + WSL2 in Virt-Manager/QEMU.</p>
+
+<p>The below articles in ArchWiki are a good start:<br />
+<a href="https://wiki.archlinux.org/title/Virt-Manager">https://wiki.archlinux.org/title/Virt-Manager</a><br />
+<a href="https://wiki.archlinux.org/title/libvirt">https://wiki.archlinux.org/title/libvirt</a><br />
+<a href="https://wiki.archlinux.org/title/QEMU">https://wiki.archlinux.org/title/QEMU</a></p>
+
+<h1 id="qemusystem-vs-qemusession">qemu:///system vs qemu:///session</h1>
+
+<p>I don’t list any differences between them as there are already some online resources<a href="https://blog.wikichoon.com/2016/01/qemusystem-vs-qemusession.html">1</a> about it.</p>
+
+<p>I tried to use the qemu:///session, but I found it can’t work with virtiofs Filesystem currently and I use the qemu:///system now.</p>
+
+<h1 id="install-windows-11">Install Windows 11</h1>
+
+<p>Windows 11 requires the TPM and secure boot. You could install <a href="https://wiki.archlinux.org/title/QEMU#Trusted_Platform_Module_emulation">a TPM related package</a> and run a command to emulate, but I prefer not to use the TPM and secure boot which is not useful for a VM environment.</p>
+
+<p>Run <code class="language-plaintext highlighter-rouge">reg add HKLM\SYSTEM\Setup\LabConfig /v BypassTPMCheck /t REG_DWORD /d 1</code> and <code class="language-plaintext highlighter-rouge">reg add HKLM\SYSTEM\Setup\LabConfig /v BypassSecureBootCheck /t REG_DWORD /d 1</code> via a guide like <a href="https://www.prime-expert.com/articles/b37/solving-this-pc-cant-run-windows-11-problem/">this</a> helps to bypass these Windows 11 installation requirement checks.</p>
+
+<p>Using the <code class="language-plaintext highlighter-rouge">no@thankyou.com</code> tip <a href="https://superuser.com/a/1744964">here</a> can bypass using a Microsoft account.</p>
+
+<h1 id="copy--paste">Copy &amp; Paste</h1>
+
+<p>Installing “Windows SPICE Guest Tools” can provide this feature: <a href="https://www.spice-space.org/download.html">https://www.spice-space.org/download.html</a></p>
+
+<h1 id="shared-folders">Shared Folders</h1>
+
+<p>You could use the “Add Hardware” option in Virt-Manager to add the “Filesytem” with “virtiofs” driver to map folders from host (Linux) to guest (Windows).</p>
+
+<p>Then refer to the guide here to virtiofs drivers to see the shared folders: <a href="https://virtio-fs.gitlab.io/howto-windows.html">https://virtio-fs.gitlab.io/howto-windows.html</a></p>
+
+<p>I soon found I can’t save the VM snapshot now, and it would throw below exception because it seems the virtiofs doesn’t support live migration:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Error</span> <span class="n">saving</span> <span class="n">domain</span><span class="p">:</span> <span class="n">Requested</span> <span class="n">operation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">valid</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">migrate</span> <span class="n">domain</span><span class="p">:</span> <span class="n">non</span><span class="o">-</span><span class="n">migratable</span> <span class="n">device</span><span class="p">:</span> <span class="mi">0000</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">02.4</span><span class="p">:</span><span class="mf">00.0</span><span class="o">/</span><span class="n">vhost</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">fs</span>
+
+<span class="nc">Traceback </span><span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="sh">"</span><span class="s">/usr/share/virt-manager/virtManager/asyncjob.py</span><span class="sh">"</span><span class="p">,</span> <span class="n">line</span> <span class="mi">72</span><span class="p">,</span> <span class="ow">in</span> <span class="n">cb_wrapper</span>
+    <span class="nf">callback</span><span class="p">(</span><span class="n">asyncjob</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+  <span class="n">File</span> <span class="sh">"</span><span class="s">/usr/share/virt-manager/virtManager/vmmenu.py</span><span class="sh">"</span><span class="p">,</span> <span class="n">line</span> <span class="mi">162</span><span class="p">,</span> <span class="ow">in</span> <span class="n">cb</span>
+    <span class="n">vm</span><span class="p">.</span><span class="nf">save</span><span class="p">(</span><span class="n">meter</span><span class="o">=</span><span class="n">asyncjob</span><span class="p">.</span><span class="nf">get_meter</span><span class="p">())</span>
+  <span class="n">File</span> <span class="sh">"</span><span class="s">/usr/share/virt-manager/virtManager/object/libvirtobject.py</span><span class="sh">"</span><span class="p">,</span> <span class="n">line</span> <span class="mi">57</span><span class="p">,</span> <span class="ow">in</span> <span class="n">newfn</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="nf">fn</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+  <span class="n">File</span> <span class="sh">"</span><span class="s">/usr/share/virt-manager/virtManager/object/domain.py</span><span class="sh">"</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1450</span><span class="p">,</span> <span class="ow">in</span> <span class="n">save</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">_backend</span><span class="p">.</span><span class="nf">managedSave</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+  <span class="n">File</span> <span class="sh">"</span><span class="s">/usr/lib/python3.10/site-packages/libvirt.py</span><span class="sh">"</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1810</span><span class="p">,</span> <span class="ow">in</span> <span class="n">managedSave</span>
+    <span class="k">raise</span> <span class="nf">libvirtError</span><span class="p">(</span><span class="sh">'</span><span class="s">virDomainManagedSave() failed</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">libvirt</span><span class="p">.</span><span class="n">libvirtError</span><span class="p">:</span> <span class="n">Requested</span> <span class="n">operation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">valid</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">migrate</span> <span class="n">domain</span><span class="p">:</span> <span class="n">non</span><span class="o">-</span><span class="n">migratable</span> <span class="n">device</span><span class="p">:</span> <span class="mi">0000</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">02.4</span><span class="p">:</span><span class="mf">00.0</span><span class="o">/</span><span class="n">vhost</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">fs</span>
+</code></pre></div></div>
+
+<p>So I use Samba instead and use Windows to connect the Samba server for sharing files.</p>
+
+<p>I found <a href="https://gist.github.com/suzker/562dc80e51841847e8d9">this gist tutorial</a> is an easy start to add the Samba service in my local Linux. Because I use Firewalld, I ran <code class="language-plaintext highlighter-rouge">sudo firewall-cmd --permanent --zone=libvirt --add-service=samba</code> to expose my Samba service for Windows VM.</p>
+
+<h1 id="using-wsl2-in-windows-11">Using WSL2 in Windows 11</h1>
+
+<p>The WSL2 needs the “Virtual Machine Platform” windows feature. My CPU is 13600k and I have a hard time finding the needed puzzle to make the WSL2 work in it.</p>
+
+<p>Use the docs <a href="https://docs.fedoraproject.org/en-US/quick-docs/using-nested-virtualization-in-kvm/">here</a> to enable the nested virtualization in KVM and adding the below in my Virt’s VM XML helps otherwise my Windows would be stuck in the “Preparing Automatic Repair” loop after installing the WSL and restarting Windows 11.</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;cpu</span> <span class="na">mode=</span><span class="s">"custom"</span> <span class="na">match=</span><span class="s">"exact"</span> <span class="na">check=</span><span class="s">"partial"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;model</span> <span class="na">fallback=</span><span class="s">"allow"</span><span class="nt">&gt;</span>Skylake-Client-noTSX-IBRS<span class="nt">&lt;/model&gt;</span>
+<span class="nt">&lt;feature</span> <span class="na">policy=</span><span class="s">"disable"</span> <span class="na">name=</span><span class="s">"mpx"</span><span class="nt">/&gt;</span>  
+<span class="nt">&lt;feature</span> <span class="na">policy=</span><span class="s">"require"</span> <span class="na">name=</span><span class="s">"vmx"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/cpu&gt;</span>
+</code></pre></div></div>
+
+<p>If you use a different CPU series, you may need to find another Qemu CPU configuration to make it works in your case and I hope you could find one.</p>
+
+<p>Also, big thanks to the info below which helps me:<br />
+<a href="https://www.reddit.com/r/VFIO/comments/usc7dd/intel_12th_gen_cpus_not_working_with_hyperv/">https://www.reddit.com/r/VFIO/comments/usc7dd/intel_12th_gen_cpus_not_working_with_hyperv/</a><br />
+<a href="https://www.redpill-linpro.com/techblog/2021/04/07/nested-virtualization-hyper-v-in-qemu-kvm.html">https://www.redpill-linpro.com/techblog/2021/04/07/nested-virtualization-hyper-v-in-qemu-kvm.html</a></p>]]></content><author><name></name></author><category term="post" /><category term="linux" /><summary type="html"><![CDATA[I want to use the WSL2 in my Linux. Yes, it’s weird but there are some use cases though I hate WSL2 and Hyper-V! The Hyper-V support in VirtualBox is not good and I failed to use the WSL2 when using VirtualBox. The VMware Fusion Player should have well support for Hyper-V (they work together with Microsoft to add this feature) but their license doesn’t allow commercial use.]]></summary></entry><entry><title type="html">轻小说阅读一箴</title><link href="https://monsoon.cl/2022/05/07/one-advice-for-light-novel-reading/" rel="alternate" type="text/html" title="轻小说阅读一箴" /><published>2022-05-07T05:00:00+00:00</published><updated>2022-11-18T15:18:43+00:00</updated><id>https://monsoon.cl/2022/05/07/one-advice-for-light-novel-reading</id><content type="html" xml:base="https://monsoon.cl/2022/05/07/one-advice-for-light-novel-reading/"><![CDATA[<blockquote>
+  <p>该文章不适合于刚开始看轻小说的受众。</p>
+</blockquote>
+
+<ul>
+  <li>不买、看只出了几本或者后续出版不快的轻小说</li>
+</ul>
+
+<p>我们总是很容易被轻小说的封面或者简介吸引而开始看轻小说。如果你经常只看了轻小说的前几本，然后之后因为出版得比较慢或者因为什么原因搁置了，那么非常有可能：</p>
+
+<ol>
+  <li>虽然你觉得那部作品很好看，但是你忘记了之前的剧情。之后看后续的内容就会有些陌生，或者你需要再从头看起或者再也不会看了。</li>
+  <li>看看断断，有时候看得兴起，有时候隔几个月后看最新出版的某集时，在之前几本书里所积聚的情感因为时间而变得对主角人物、故事的感触再也不如以前了。</li>
+  <li>书不好看，所以不看了；或者你正好看到某集，作者就不写了——最好的情况。</li>
+</ol>
+
+<p>也许有人会说那么这样看轻小说或者找轻小说看的乐趣不就少了很多，而且现在很多很火的新出的轻小说都不能看了不是吗？有舍必有得吧，现在也有很多已经出版完或者接近出完了的轻小说，可以看看那些。如果没有好看的，我推荐可以看些文学作品、推理小说这类的，选择还是很多的。也可以看看 ACG，或者离开这些，试试其他的生活方式！另外也可以学习日语，那么就有很多已经完结的轻小说可以看了。</p>
+
+<p>人生的一种遗憾在于并未深入地体会某种情感。如果一位轻小说爱好者，看了那么多年轻小说，大部分看的都是某些轻小说的前几本，那么这是不是有点伤感呢。</p>
+
+<p>我们要拒绝一种快餐式的体验，我们需要把一种娱乐方式变得更深刻和强烈。</p>]]></content><author><name></name></author><category term="nokosu" /><category term="book" /><summary type="html"><![CDATA[该文章不适合于刚开始看轻小说的受众。]]></summary></entry><entry><title type="html">对抗无所事事</title><link href="https://monsoon.cl/2022/03/30/against-munashisa/" rel="alternate" type="text/html" title="对抗无所事事" /><published>2022-03-30T13:00:00+00:00</published><updated>2022-03-30T12:30:47+00:00</updated><id>https://monsoon.cl/2022/03/30/against-munashisa</id><content type="html" xml:base="https://monsoon.cl/2022/03/30/against-munashisa/"><![CDATA[<p>在互联网上每天都是爆炸性的内容和讨论，甚至你一天从头看到晚都看不完这些内容。我们应该少看一些看法，并且我们也无需对于一些事物有本质性不同看法的人辩驳并试着说服他们，甚至不是很值得和对方讨论。我们需要在某一个时间后，认识到我们总有一天需要从这些看法或者讨论中，对认同或者与自己一致的看法表示慰藉、对于不赞同的看法难受厌恶、对于借由一些论点或者现象对痛恶的一方进行代入式的满足或者胜利宣言——这些二元化的看法中走出来。</p>
+
+<p>让我试着从几点来论述这些问题并说服我自己。</p>
+
+<ul>
+  <li>
+    <p>各种娱乐方式或者传播媒介（新闻媒体、互联网）开始流行起来，信息的渠道变的碎片化。也许我们可以满足于一时的了解欲望、打发时间来消磨时间，但是系统、完整或者深入的知识体系或者情感我认为更具有价值。</p>
+  </li>
+  <li>
+    <p>我们必须要使自己的某种变的更加持久。如果你与他人的思想有所碰撞，并且你相信你的这种思想是具有独创性有价值的话，你应该用更持久的方式，在你的社交媒体、或者更深入许多——在日志、博文和书籍等文字作品纪录下这些。这是你比对方更进一步的真理。或者通过某种方式将这些想法向更多的人阐释、传播。</p>
+  </li>
+  <li>
+    <p>在国内很多社交媒体，不用说回声室效应、一些自己说的内容因为各种原因被删除外，如果不是为了在里面 circle jerk 或者获取某种更丰富的信息分享的渠道的话，那么我们需要抑制自己了解他人的欲望，更不论那些想法其实很幼稚的很。另外里面很多的评论、内容更像是表达和批评论点，实际上很多论点的论据和逻辑性都非常欠缺。这里无法建立哲学的思考。也许我们曾经觉得我们曾经的某段时间，我们看过不一样的天空或者喜欢某个论坛、社交平台的环境，但是那些东西也早也不在。有一天你应该认识到你也许比互联网上在述说着的人的更年长了，我们已经过去了网上冲浪的美好日子。虽然这有点残忍，但是从另一方面来说，你在这个世界里比其他人的平均也更加成熟了，走的应该更远了。</p>
+  </li>
+  <li>
+    <p>时间弥足珍贵，我们应把这里的时间用在更有价值的事物上。我还记得一次上课的时候，我坐在前排，一直在底下用手机在一个论坛里对另外一个人的意见进行辩驳，因为我那时想要表述自己和说服他人的情感是那么的强烈。现在想起来，我觉得我有些对不起老师。我应该将我的这段帖子里需要表达的情感，阐发在其他的地方，而不是现在像沙子那样吹走了。</p>
+  </li>
+  <li>
+    <p>我们应该放弃那些无药可救或者从你自身角度觉得无药可救的人。这是一种傲慢，我们必须要傲慢并且始终认为自己是正确的那样活着。因为我们的那些看法是纯粹、正确和美好的。</p>
+  </li>
+</ul>]]></content><author><name></name></author><category term="post" /><category term="weather" /><summary type="html"><![CDATA[在互联网上每天都是爆炸性的内容和讨论，甚至你一天从头看到晚都看不完这些内容。我们应该少看一些看法，并且我们也无需对于一些事物有本质性不同看法的人辩驳并试着说服他们，甚至不是很值得和对方讨论。我们需要在某一个时间后，认识到我们总有一天需要从这些看法或者讨论中，对认同或者与自己一致的看法表示慰藉、对于不赞同的看法难受厌恶、对于借由一些论点或者现象对痛恶的一方进行代入式的满足或者胜利宣言——这些二元化的看法中走出来。]]></summary></entry><entry><title type="html">瑰色幻想</title><link href="https://monsoon.cl/2022/03/01/bara-no-fantasy/" rel="alternate" type="text/html" title="瑰色幻想" /><published>2022-03-01T13:00:00+00:00</published><updated>2022-04-10T11:36:17+00:00</updated><id>https://monsoon.cl/2022/03/01/bara-no-fantasy</id><content type="html" xml:base="https://monsoon.cl/2022/03/01/bara-no-fantasy/"><![CDATA[<p>在这个疫情肆虐的今天，想和一个美少年，一起宅。或者一起带口罩，有时冒着可能会被感染的风险出去玩或者美食，谈一场惊天动地却又惧怕又不惧疫情的那种脆弱但是深挚的某种爱情。</p>
+
+<p>在这个战争弥漫每个人脆弱的神经的现在，想和一个美少年，一起宅，一起看新闻一起厌恶、热爱这个世界。</p>
+
+<p>在那个老头环发布的现在，想和一个美少年，一起宅，一起游戏、连机，相互受苦，在一个新世界冒险，谈一场爱情和死亡的故事。</p>
+
+<p>慢慢长夜，一起失眠性爱睡觉，一起看新闻、玩游戏，一起在困的不行的时候爬起床来。</p>
+
+<p>现在，一个少年躺在了一块倾斜的玻璃做的阶梯旁，裸露着某种程度的肌肤，像是睡着般。</p>
+
+<p>你可以走上前去，他亦是你心中的瑰色幻想。</p>]]></content><author><name></name></author><category term="post" /><category term="weather" /><summary type="html"><![CDATA[在这个疫情肆虐的今天，想和一个美少年，一起宅。或者一起带口罩，有时冒着可能会被感染的风险出去玩或者美食，谈一场惊天动地却又惧怕又不惧疫情的那种脆弱但是深挚的某种爱情。]]></summary></entry><entry><title type="html">密室之中</title><link href="https://monsoon.cl/2022/01/30/in-a-sealed-room/" rel="alternate" type="text/html" title="密室之中" /><published>2022-01-30T13:00:00+00:00</published><updated>2022-01-31T15:39:30+00:00</updated><id>https://monsoon.cl/2022/01/30/in-a-sealed-room</id><content type="html" xml:base="https://monsoon.cl/2022/01/30/in-a-sealed-room/"><![CDATA[<p>我们在一个巨大的密室中，无论是物理结构上的，亦是心理上的。</p>
+
+<p>当我醒来，周围绝非青蓝色的自然，而是有着十来个或站或躺着的陌生人、封闭式地将我们围绕的墙面。因为某种阴谋、想让人流血的戏剧性的缘由，我在这间巨大的，有着某些奇怪边角的圆形竞技场式的建筑物中醒来。</p>
+
+<p>我和其他人交换了一些基本的信息，我们在一间四面都是白色的典雅的房间里享用了美味的晚餐，这是最后的晚餐吗？我们听到四面传来一种无机质的女性的清亮的声音，我们陷入了一种只要活下去就有巨额财富、一些可以实现愿望的柔软但是底部有细长突刺的圆形床中。我看不出我们为什么需要残杀的理由和那些欲望。</p>
+
+<p>意外的是，原来每一个人的手机都在身边，这里无法接受到任何的蜂窝信号，但是有一个名字透露出某种玄妙无需密码的 WiFi 网络。这也是为什么这篇文章如何得以写成和发布的。</p>
+
+<p>不知道是谁突然提出了这样的想法：我们在微信里建了一个聊天群。无比讽刺和让人期待这样的联系方式会让这个暴风雪山庄的场景发生什么，或者，也许什么也无法发生。</p>
+
+<p>向观众席的方向，我们来到了每个人自己的独立房间。门无法上锁，我靠着门，也许我可以抱着被子靠着门睡，这样是不是就有可能更容易苟活下去了呢？</p>
+
+<p>我打开手机，我可以给我的家人打一个电话，我可以打开聊天、社交软件，发表些什么，希望想向某种温暖靠近，逃避这个密室。曾长时间参与的聊天群里滚动的话题、表情包有点让我忍不住流泪，他人无法感受我，我也无法感受他人了。我需要靠自己的机智，在这个密室中活下去。</p>
+
+<p>打开了刚刚加了不久的聊天群，群里有一些闲聊的内容、也有一些浅浅的猜疑内容。我一个个打开他们的个人简介，想要看清他/她们的头像所隐含的某种个人的信息、他们的名字，我试着将他们记忆并与每个我刚刚在吃饭的房间所记下的人的外表和特点相关联。我在查看他们每个人的朋友圈，也许有人现在也在看我的朋友圈吧。</p>
+
+<p>第一个人的朋友圈里有很多工作相关的内容，一些像是所属工作所需要的某种向更广的人群宣传的方式，被包围的工作内容外，也有一些出行、美食的照片。我是那种极其讨厌转发公司相关信息的人，我认为这里有种悲伤——无论是从公司的角度还是个人的角度。也许我也应该凑巧发一下工作相关的内容，毕竟我还没那么绝情还需要为公司出卖我的肉体或者精神。</p>
+
+<p>第二个人的朋友圈里有非常多的美食照片、某种看似精巧的风景和自拍照，甚至还可以看到一些特意拍摄的艺术照和经过制作的个人视频。故作清高、认为自己有更深刻思想的肤浅我也许永远不会喜欢这样的人，我觉得他们很浅甚至不值得批评。也许他们正在活出他们觉地面白的人生、在一分一秒的纪录他们所有的珍贵的时间呢。也许我才更俗不可耐呢。</p>
+
+<p>第三个人的朋友圈里没有什么信息，空空荡荡。和我很像。朋友圈这些杂乱、充满着某种感官、浓郁气味的地方，让我觉得再也没有什么值得分享了。也许我也惧怕会被别人说些什么，我觉得他们无法理解我，但是怎么可能呢？</p>
+
+<p>第四个人的朋友圈里，有很多他可爱的儿子/女儿的照片，一些经过精心编排的他们相关的视频（也包括新年祝贺相关的）。</p>
+
+<p>然后我又看了其他人的。</p>
+
+<p>我们生活在一个巨大的密室之中，一个巨大的泡沫之中，一个如幻似真的孤岛上。</p>]]></content><author><name></name></author><category term="post" /><category term="weather" /><summary type="html"><![CDATA[我们在一个巨大的密室中，无论是物理结构上的，亦是心理上的。]]></summary></entry><entry><title type="html">使用 GitHub Copilot 的某些局限性</title><link href="https://monsoon.cl/2022/01/28/some-limitation-of-using-github-copilot/" rel="alternate" type="text/html" title="使用 GitHub Copilot 的某些局限性" /><published>2022-01-28T14:00:00+00:00</published><updated>2022-11-18T12:14:05+00:00</updated><id>https://monsoon.cl/2022/01/28/some-limitation-of-using-github-copilot</id><content type="html" xml:base="https://monsoon.cl/2022/01/28/some-limitation-of-using-github-copilot/"><![CDATA[<ol>
+  <li>
+    <p>使用 GitHub Copilot（下文略称为 Copilot）生成的代码并不能保证能编译成功或者可运行，这种妥协其实直接反应了使用机器学习的 Copilot 生成代码可能先天上就与我们在编程中追求的正确性不匹配（mismatch）。和<a href="https://en.wikipedia.org/wiki/Object%E2%80%93relational_impedance_mismatch">类似的 mismatch 的编程情况</a>相类似，这将导致种种问题并且我们需要使用各种方式来弥这种缺陷。</p>
+  </li>
+  <li>
+    <p>和机翻类似。现今应有很多作品都经过了机翻，后再人工改进使我们认为这这些是正常翻译后的作品。对比和一个有良好翻译素养的人翻译的作品，在很多情况下是有很大差异的。 当我们用类似的手段（指用 Copilot 补全代码）后再改进代码的这种编写代码的新形式中，我们对于代码的实现其实被定式了。我们很有可能在编写前从未仔细思考过代码的实现或者在看到 Copilot 补全后的代码而在潜意识里排除了其他的实现，而导致未成从自我的角度重新构建出代码（甚至是你的代码世界）。你可能脑海里原本有一个更好的代码实现但是你已然不再留意它。你的代码水平变成了修缮而不是重新塑造。这也变扼杀了你的想象力和职业技能。</p>
+  </li>
+</ol>]]></content><author><name></name></author><category term="post" /><category term="programming" /><summary type="html"><![CDATA[使用 GitHub Copilot（下文略称为 Copilot）生成的代码并不能保证能编译成功或者可运行，这种妥协其实直接反应了使用机器学习的 Copilot 生成代码可能先天上就与我们在编程中追求的正确性不匹配（mismatch）。和类似的 mismatch 的编程情况相类似，这将导致种种问题并且我们需要使用各种方式来弥这种缺陷。]]></summary></entry><entry><title type="html">四个世界</title><link href="https://monsoon.cl/2022/01/16/four-worlds/" rel="alternate" type="text/html" title="四个世界" /><published>2022-01-16T09:00:00+00:00</published><updated>2022-01-21T04:30:24+00:00</updated><id>https://monsoon.cl/2022/01/16/four-worlds</id><content type="html" xml:base="https://monsoon.cl/2022/01/16/four-worlds/"><![CDATA[<p>我在封闭的第三个世界里，这亦是一个虚拟的世界。这个世界从一种诡谲的曲面形状开始平复正常，四面开始闪现某种波纹的光亮，在光亮的回闪中我看见了四个世界的情景。</p>
+
+<p>第一个世界是真实的世界，是个有着其他世界无法比拟的分辨率的世界。我们可以清楚但是又不再清楚地看清他/她人的世界。我们被时空限制，我们和身边的人最接近，我们听见、看到别人的话语和动作，但是这却又变成了一个我们再也无法理解他人或者被他人无法理解的世界。我们有很多生活上的争吵、冲突和逃避。我们伪装自己或者顺势而为。我们在第三个世界希望这个世界有某种奇迹式的邂逅、青春。不过这个世界有某种我喜欢的雨，某种夹杂着冰冷但是意境的雨。</p>
+
+<p>第二个世界是社交的世界，在这个世界我们许多人因为各种兴趣或者话题而汇聚在了一些群组或者圈子里。每个人都可以很温柔，一些段子、ACG 图、猫图满溢其间，我们沉溺于此。我们曾经自以为这个世界就是”这个”世界的全部，我们曾经觉得我和他人之间的群聊可以永续继续。但是这也是一个脆弱的世界，我们可能与他人在这个世界里相处比第一个世界更久一些，但是也许我们从未真正了解他人，一些模糊的话语就可以产生许多冲突和误解（当然说出产生误解的当事人也难辞其咎），一些东西真正破损了。</p>
+
+<p>第三个世界是个人的内心世界。这个世界也许有分辨率也许没有分辨率，也许有温度也许没有温度，但是肯定有想象。我们在这个世界里沉迷于各种 ACG 作品、书籍和音乐。就算弗洛伊德再怎么说人的潜意识占绝大部分，这个世界和你相互契合。这个世界最大的让我困惑的地方就是，这个“世界”有四个世界的存在，只停留在这个世界的人哪里都能去，但是又无去无从。</p>
+
+<p>第四个世界是和前三个世界有所交叠的世界。《Resonance of Fate》一个主角问另外两个主角“你知道虽然庞大，实际上却渺小的东西是什么吗？”</p>
+
+<p>各种的世界。</p>]]></content><author><name></name></author><category term="post" /><category term="weather" /><summary type="html"><![CDATA[我在封闭的第三个世界里，这亦是一个虚拟的世界。这个世界从一种诡谲的曲面形状开始平复正常，四面开始闪现某种波纹的光亮，在光亮的回闪中我看见了四个世界的情景。]]></summary></entry><entry><title type="html">二月的月季</title><link href="https://monsoon.cl/2022/01/16/china-rose-in-feb/" rel="alternate" type="text/html" title="二月的月季" /><published>2022-01-16T07:00:00+00:00</published><updated>2022-01-19T11:52:16+00:00</updated><id>https://monsoon.cl/2022/01/16/china-rose-in-feb</id><content type="html" xml:base="https://monsoon.cl/2022/01/16/china-rose-in-feb/"><![CDATA[<p>二月的冬日，我去拜见了我的朋友，并且在他的墓前放了一束月季，我想他是一个会想在这样寒冷的日子里看到鲜艳颜色的家伙。</p>
+
+<p>我有些怀念他，所以昨天我也上了一下他现在还在的 blog。他是一个想法有点特别，也许说不上特别，可能只是芸芸众生的一个人。</p>
+
+<p>我们无法抗拒时间，我不会停止思念。但是想来也许百年后，我可能无法再思念了，我对他的情感和他的博文难道就会那么悲伤得再也不见了吗？</p>
+
+<p>GitHub Pages 的功能以后还会永续运营吗？我想把他的 blog 再同步到其他的比如说 GitLab、Bitbucket 之类的网站，再帮他把他的 blog 网站都 Internet Archive 了。</p>
+
+<p>我想让其他人看到这样鲜艳的二月的月季。</p>]]></content><author><name></name></author><category term="post" /><category term="story" /><summary type="html"><![CDATA[二月的冬日，我去拜见了我的朋友，并且在他的墓前放了一束月季，我想他是一个会想在这样寒冷的日子里看到鲜艳颜色的家伙。]]></summary></entry></feed>
