@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@config "./tailwind.config.js";
+
+@layer base {
+  a {
+    @apply hover:underline;
+  }
+}

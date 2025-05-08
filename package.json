@@ -1,0 +1,32 @@
+{
+  "name": "monsoon-blog",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "node_modules/.bin/astro dev",
+    "build": "node_modules/.bin/astro build",
+    "preview": "node_modules/.bin/astro preview",
+    "astro": "node_modules/.bin/astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.2.6",
+    "@astrojs/rss": "^4.0.11",
+    "@astrojs/sitemap": "^3.3.1",
+    "@tailwindcss/vite": "^4.1.5",
+    "astro": "^5.7.11",
+    "npm-check-updates": "^18.0.1",
+    "rehype": "^13.0.2",
+    "rehype-sanitize": "^6.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-stringify": "^11.0.0",
+    "tailwindcss": "^4.1.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
+    "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-astro-organize-imports": "^0.4.11",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "prettier-plugin-tailwindcss": "^0.6.11"
+  }
+}

@@ -1,26 +1,31 @@
-name: Build and Deploy to Github Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - master
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          # https://github.com/actions/checkout/issues/520#issuecomment-1320838255
-          fetch-depth: 2147483647
-      - uses: actions/cache@v4
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - uses: jeffreytse/jekyll-deploy-action@v0.5.1
-        with:
-          provider: 'github'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: 'gh-pages'
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4
+      - name: Install, build, and upload your site
+        uses: withastro/action@v4
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,40 @@
+---
+import { SITE_DESCRIPTION } from "../consts";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="About & Links">
+  <div
+    class="prose prose-ul:ps-8 prose-headings:text-sky-500 prose-headings:my-0 prose-headings:font-normal prose-p:indent-4 prose-a:text-zinc-500 max-w-none"
+  >
+    <p class="text-lg">{SITE_DESCRIPTION}</p>
+
+    <section>
+      <h2>友情链接</h2>
+      <ul>
+        <li><a href="https://ioover.net">读写终子</a></li>
+        <li><a href="https://blog.gyara.moe">ギャラ</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>一些个人的链接</h2>
+      <ul>
+        <li>
+          <a
+            href="https://open.spotify.com/playlist/42x5xsODquQ57kHVsalxqQ?si=y_gyzUopTi2TQyNsV_4WKQ"
+            >Spotify 上喜欢的歌</a
+          >
+        </li>
+        <li>该 blog 的 <a href="/rss.xml">RSS feed 地址</a></li>
+      </ul>
+
+      <iframe
+        class="h-104 w-76 border-0 pl-8"
+        src="https://open.spotify.com/embed/playlist/42x5xsODquQ57kHVsalxqQ?utm_source=generator"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"></iframe>
+    </section>
+  </div>
+</BaseLayout>

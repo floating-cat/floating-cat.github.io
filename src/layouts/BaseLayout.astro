@@ -1,0 +1,61 @@
+---
+import Header from "../components/Header.astro";
+import { SITE_TITLE } from "../consts";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const fullTitle = title.includes(SITE_TITLE)
+  ? SITE_TITLE
+  : `${title} - ${SITE_TITLE}`;
+---
+
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!-- prevent favicon.ico request -->
+    <link rel="icon" href="data:," />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={SITE_TITLE}
+      href={new URL("rss.xml", Astro.site)}
+    />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Primary Meta Tags -->
+    <title>{fullTitle}</title>
+    <meta name="title" content={fullTitle} />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={fullTitle} />
+    <meta property="twitter:description" content={description} />
+  </head>
+
+  <body class="mx-auto max-w-176">
+    <Header />
+    <main class="p-4">
+      <slot />
+    </main>
+  </body>
+</html>

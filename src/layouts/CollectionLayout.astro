@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { filterDraftAndSortBlogs, toLocaleDateString } from "../util";
+
+interface Props {
+  title: string;
+  description?: string;
+  category: string;
+}
+const { title, description, category } = Astro.props;
+
+const blogs = (await filterDraftAndSortBlogs()).filter(({ data }) => {
+  return data.category === category;
+});
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="my-4 flex flex-col gap-y-6">
+    {
+      blogs.map((blog) => (
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+          <a class="text-2xl text-sky-500" href={`/blog/${blog.id}`}>
+            <h2 itemprop="name title headline">{blog.data.title}</h2>
+          </a>
+
+          <time
+            class="block text-zinc-500"
+            datetime={blog.data.pubDate.toISOString()}
+            itemprop="datePublished"
+          >
+            {toLocaleDateString(blog.data.pubDate)}
+          </time>
+        </article>
+      ))
+    }
+  </section>
+</BaseLayout>
