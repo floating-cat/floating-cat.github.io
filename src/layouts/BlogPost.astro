@@ -9,11 +9,11 @@ const { title, pubDate } = Astro.props;
 
 <BaseLayout title={title}>
   <article
-    class="prose prose-headings:text-sky-500 prose-headings:mt-0 prose-headings:mb-4 prose-p:indent-4 prose-blockquote:opacity-60 prose-blockquote:border-sky-500 prose-figure:my-0 prose-a:text-sky-500 prose-ol:list-[hiragana] prose-headings:font-normal prose-ul:ps-8 prose-ol:ps-8 max-w-none"
+    class="prose prose-headings:text-sky-500 prose-headings:mt-0 prose-headings:mb-4 prose-p:indent-4 prose-blockquote:opacity-60 prose-blockquote:border-sky-500 prose-figure:my-0 prose-a:text-sky-500 prose-ol:list-[hiragana] prose-headings:font-normal prose-ul:ps-8 prose-ol:ps-8 max-w-none py-0 md:py-4"
     itemscope
     itemtype="https://schema.org/BlogPosting"
   >
-    <div class="flex flex-col items-center gap-y-2 py-6">
+    <div class="mb-5 flex flex-col items-center gap-y-2">
       <h1 class="mb-0! text-3xl text-sky-500" itemprop="name title headline">
         {title}
       </h1>

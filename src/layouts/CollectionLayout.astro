@@ -15,7 +15,7 @@ const blogs = (await filterDraftAndSortBlogs()).filter(({ data }) => {
 ---
 
 <BaseLayout title={title} description={description}>
-  <section class="my-4 flex flex-col gap-y-6">
+  <section class="my-0 flex flex-col gap-y-6 md:my-4">
     {
       blogs.map((blog) => (
         <article itemscope itemtype="http://schema.org/BlogPosting">

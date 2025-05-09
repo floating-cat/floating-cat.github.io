@@ -5,7 +5,7 @@ tags: [weather]
 category: post
 ---
  
-<div class="not-prose space-y-4 m-auto h-[14rem] [writing-mode:vertical-rl]">
+<div class="not-prose space-y-4 m-auto h-80 md:h-56 [writing-mode:vertical-rl]">
 
   在這個世界上，魔女大致分為2個類型。
 
